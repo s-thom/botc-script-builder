@@ -3,11 +3,13 @@
     CharacterTeam,
     ScriptCharacter,
   } from "../../generated/script-schema";
+  import type { ClassValue } from "svelte/elements";
   import * as CHARACTER_ICONS from "../../generated/character-icons";
   import { ALLOWED_EXTERNAL_HOSTNAMES } from "../../lib/images";
 
   export interface CharacterIconProps {
     character: ScriptCharacter;
+    class?: ClassValue;
   }
 
   function getCharacterIconUrl(character: ScriptCharacter): string | null {
@@ -47,16 +49,26 @@
 </script>
 
 <script lang="ts">
-  const { character }: CharacterIconProps = $props();
+  const { character, class: className }: CharacterIconProps = $props();
 
   const src = getCharacterIconUrl(character);
 </script>
 
-{#if src != null}
-  <img {src} alt="" />
-{:else}
-  <div></div>
-{/if}
+<div class={["icon-container", className]}>
+  {#if src != null}
+    <img class="icon" {src} alt="" />
+  {:else}
+    <div class="icon icon-placeholder"></div>
+  {/if}
+</div>
 
 <style>
+  .icon-container {
+    aspect-ratio: 1/1;
+  }
+
+  .icon {
+    width: 100%;
+    aspect-ratio: 1/1;
+  }
 </style>

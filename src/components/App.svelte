@@ -1,7 +1,7 @@
 <script lang="ts">
   import tb from "../generated/edition-scripts/tb.json";
-  import { globalState, setScript } from "../lib/state.svelte";
-  import CharacterIcon from "./common/CharacterIcon.svelte";
+  import { setScript } from "../lib/state.svelte";
+  import CurrentCharacterList from "./CurrentCharacterList.svelte";
 </script>
 
 <main>
@@ -15,14 +15,7 @@
   </div>
   <div>
     <div></div>
-    <ul>
-      {#each globalState.characters as character}
-        <li>
-          <CharacterIcon {character} />
-          <h3>{character.name}</h3>
-        </li>
-      {/each}
-    </ul>
+    <CurrentCharacterList />
   </div>
 </main>
 
