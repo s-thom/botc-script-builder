@@ -9,7 +9,7 @@
     "full-build": "npm run setup && npm run build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "setup": "node --experimental-strip-types setup/generate-script-schema.ts && node --experimental-strip-types setup/download-role-icons.ts && node --experimental-strip-types setup/generate-edition-scripts.ts"
+    "setup": "node setup/generate-script-schema.ts && node setup/download-role-icons.ts && node setup/generate-edition-scripts.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.0.0",
