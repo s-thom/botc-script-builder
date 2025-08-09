@@ -3,11 +3,14 @@ export type CharacterEdition =
   | "snv"
   | "bmr"
   | "kickstarter"
-  | "carousel";
+  | "carousel"
+  | "custom";
 
-export interface CharacterMetadata {
-  id: string;
-  edition: CharacterEdition;
+export interface EditionMetadata {
+  name: string;
+  icon: string;
 }
 
-export type CharacterType = string;
+export interface CharacterMetadata {
+  edition: CharacterEdition;
+}

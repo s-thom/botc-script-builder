@@ -26,6 +26,7 @@
   "dependencies": {
     "@lucide/svelte": "^0.536.0",
     "@thisux/sveltednd": "^0.0.20",
+    "nanoid": "^5.1.5",
     "zod": "^4.0.16"
   }
 }

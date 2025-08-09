@@ -1,17 +1,16 @@
 <script lang="ts">
   import type {
-    ASpecialAppIntegrationFeature,
     CharacterTeam,
     ScriptCharacter,
   } from "../../generated/script-schema";
+  import type { OfficialCharacterId } from "../../generated/types";
   import {
     CHARACTERS_BY_TEAM,
     getEnforcedFabled,
     TEAM_NAMES,
   } from "../../lib/characters";
   import { CHARACTER_METADATA } from "../../lib/metadata/characters";
-  import { EDITION_ICONS, EDITION_NAMES } from "../../lib/metadata/editions";
-  import type { CharacterEdition } from "../../lib/metadata/types";
+  import { EDITIONS } from "../../lib/metadata/editions";
   import { globalState } from "../../lib/state.svelte";
   import { filterInPlace } from "../../lib/util/arrays";
   import CharacterSelectList from "./CharacterSelectList.svelte";
@@ -25,21 +24,21 @@
     })
   );
 
-  const EDITION_CHARACTERS: ScriptCharacter[] = Object.entries(
-    EDITION_NAMES
-  ).map(([edition, name]) => ({
-    id: edition,
-    name,
-    team: edition as never,
-    ability: "",
-    special: [
-      {
-        type: "botc-script-builder",
-        name: "replace-icon",
-        value: EDITION_ICONS[edition as CharacterEdition],
-      } as never,
-    ],
-  }));
+  const EDITION_CHARACTERS: ScriptCharacter[] = Object.entries(EDITIONS)
+    .filter(([id]) => id !== "custom") // Hide custom selection for now, will be added when custom characters are better supported.
+    .map(([id, data]) => ({
+      id: id,
+      name: data.name,
+      team: id as never,
+      ability: "",
+      special: [
+        {
+          type: "botc-script-builder",
+          name: "replace-icon",
+          value: data.icon,
+        } as never,
+      ],
+    }));
 
   let search = $state("");
   let teamFilter = $state(new Set<string>());
@@ -107,7 +106,8 @@
           if (editionFilter.size > 0) {
             const edition =
               character.id in CHARACTER_METADATA
-                ? CHARACTER_METADATA[character.id].edition
+                ? CHARACTER_METADATA[character.id as OfficialCharacterId]
+                    .edition
                 : "custom";
             result &&= editionFilter.has(edition);
           }
@@ -127,9 +127,9 @@
 
 <h2>Select characters</h2>
 
-<div>
-  <label class="option" for="name-search">
-    <span>Search by name: </span>
+<div class="search-form">
+  <label class="search-option" for="name-search">
+    <span class="search-label">Search by name: </span>
     <input
       class="text-input"
       id="name-search"
@@ -139,20 +139,22 @@
       bind:value={search}
     />
   </label>
-  <div>
-    <span>Teams:</span>
+  <div class="search-option search-tags">
+    <span class="search-label">Teams:</span>
     <CharacterSelectList
       characters={TEAM_CHARACTERS}
       selectedSet={teamFilter}
       onCharacterSelect={onTeamSelect}
+      itemClass="tag"
     />
   </div>
-  <div>
-    <span>Editions:</span>
+  <div class="search-option search-tags">
+    <span class="search-label">Editions:</span>
     <CharacterSelectList
       characters={EDITION_CHARACTERS}
       selectedSet={editionFilter}
       onCharacterSelect={onEditionSelect}
+      itemClass="tag"
     />
   </div>
 </div>
@@ -173,5 +175,36 @@
 <style>
   .team-list {
     margin-block: 1rem;
+  }
+
+  .search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .search-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-label {
+    flex-shrink: 0;
+  }
+
+  .search-tags {
+    :global(.character-name) {
+      font-family: var(--font-body);
+    }
+
+    :global(.tag) {
+      gap: 0.1rem;
+
+      :global(.icon-container) {
+        width: 24px;
+      }
+    }
   }
 </style>

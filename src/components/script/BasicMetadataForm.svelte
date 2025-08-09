@@ -35,7 +35,7 @@
   .title-form {
     position: sticky;
     background-color: var(--color-background);
-    top: 0;
+    top: -0.5rem;
     padding: 0.5rem;
     margin: -0.5rem;
   }

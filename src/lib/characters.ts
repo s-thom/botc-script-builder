@@ -47,6 +47,10 @@ export const TEAM_NAMES: Record<CharacterTeam, string> = {
   fabled: "Fabled",
 };
 
+function normaliseCharacterId(id: string): string {
+  return id.toLowerCase().replace(/_/g, "");
+}
+
 export function getFullScriptCharacter(
   character: ScriptCharacter | OfficialCharacterID | OfficialCharacterDeprecated
 ): ScriptCharacter {
@@ -55,7 +59,9 @@ export function getFullScriptCharacter(
   }
 
   const characterId = typeof character === "string" ? character : character.id;
-  const officialCharacter = CHARACTERS_BY_ID.get(characterId);
+  const officialCharacter = CHARACTERS_BY_ID.get(
+    normaliseCharacterId(characterId)
+  );
 
   if (officialCharacter) {
     return officialCharacter;

@@ -200,6 +200,7 @@ textarea:not([rows]) {
   font-display: swap;
 }
 
+.visually-hidden-always,
 .visually-hidden:not(:focus):not(:active) {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
