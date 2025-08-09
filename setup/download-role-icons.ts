@@ -18,7 +18,7 @@ if (!pageRequest.ok) {
 
 const pageContent = await pageRequest.text();
 const scriptMatch = pageContent.match(
-  /src="(\/assets\/index-[A-Za-z0-9-]{8}.js)"/,
+  /src="(\/assets\/index-[A-Za-z0-9-]{8}.js)"/
 );
 if (!scriptMatch) {
   throw new Error("Script tag not found in HTML");
@@ -34,13 +34,15 @@ const scriptContent = await scriptRequest.text();
 
 const iconMatches = Array.from(
   scriptContent.matchAll(
-    /"(\/assets\/([^"]+(?:_[eg])?)-[A-Za-z0-9_-]{8}.webp)"/gm,
-  ),
+    /"(\/assets\/([^"]+(?:_[eg])?)-[A-Za-z0-9_-]{8}.webp)"/gm
+  )
 );
 
 const originalFilenamesById: Record<string, string> = {};
 for (const match of iconMatches) {
-  originalFilenamesById[match[2]] = match[1];
+  if (!originalFilenamesById[match[2]]) {
+    originalFilenamesById[match[2]] = match[1];
+  }
 }
 
 const iconsToFetch: Record<string, string> = {};
@@ -104,7 +106,7 @@ async function processIcon(characterId: string, originalFileName: string) {
   const filename = `${characterId}.webp`;
 
   importLines.push(
-    `export { default as ${characterId} } from "./${filename}";\n`,
+    `export { default as ${characterId} } from "./${filename}";\n`
   );
 
   const cacheFilePath = join(CACHE_DIR, filename);
@@ -140,7 +142,7 @@ const queue = new PQueue({ concurrency: 5 });
 Object.entries(iconsToFetch)
   .sort((a, b) => a[0].localeCompare(b[0]))
   .forEach(([id, originalFileName]) =>
-    queue.add(() => processIcon(id, originalFileName)),
+    queue.add(() => processIcon(id, originalFileName))
   );
 
 await queue.onIdle();
