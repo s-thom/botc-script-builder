@@ -7,7 +7,7 @@
     <label class="visually-hidden" for="script-title">Script title</label><input
       id="script-title"
       name="script-title"
-      class="input title-input"
+      class="text-input title-input"
       type="text"
       aria-label="Title"
       autocomplete="off"
@@ -20,7 +20,7 @@
     ><input
       id="script-author"
       name="script-author"
-      class="input"
+      class="text-input"
       type="text"
       aria-label="Author"
       autocomplete="off"
@@ -48,24 +48,6 @@
     }
     &:not(:last-child) {
       margin-block-end: 0.5rem;
-    }
-  }
-
-  .input {
-    flex-grow: 1;
-    background: transparent;
-    border: 2px solid var(--color-control-border-active);
-    border-radius: var(--border-radius);
-    color: inherit;
-    min-width: 0;
-    padding: 0.2rem;
-
-    &:hover {
-      border-color: var(--color-control-border-hover);
-    }
-
-    &:active {
-      border-color: var(--color-control-border-active);
     }
   }
 

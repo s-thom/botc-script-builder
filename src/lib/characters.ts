@@ -14,10 +14,7 @@ export const CHARACTERS_BY_ID = [...data.roles, ...data.fabled].reduce<
 }, new Map());
 
 export function getFullScriptCharacter(
-  character:
-    | ScriptCharacter
-    | OfficialCharacterID
-    | OfficialCharacterDeprecated,
+  character: ScriptCharacter | OfficialCharacterID | OfficialCharacterDeprecated
 ): ScriptCharacter {
   if (typeof character === "object" && "team" in character) {
     return character;
@@ -38,12 +35,23 @@ export function getFullScriptCharacter(
   };
 }
 
+export function getMinimalScriptCharacter(
+  character: ScriptCharacter
+): ScriptCharacter | OfficialCharacterID {
+  const officialCharacter = CHARACTERS_BY_ID.get(character.id);
+  if (officialCharacter) {
+    return officialCharacter.id;
+  }
+
+  return character;
+}
+
 export function isScriptMetadata(
   item:
     | ScriptCharacter
     | OfficialCharacterID
     | ScriptMetadata
-    | OfficialCharacterDeprecated,
+    | OfficialCharacterDeprecated
 ): item is ScriptMetadata {
   return typeof item === "object" && item.id === "_meta" && !("team" in item);
 }

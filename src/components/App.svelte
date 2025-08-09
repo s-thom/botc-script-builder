@@ -1,23 +1,18 @@
 <script lang="ts">
-  import tb from "../generated/edition-scripts/tb.json";
-  import { setScript } from "../lib/state.svelte";
+  import ImportExportForm from "./options/ImportExportForm.svelte";
   import BasicMetadataForm from "./script/BasicMetadataForm.svelte";
   import CurrentCharacterList from "./script/CurrentCharacterList.svelte";
 </script>
 
 <main class="container">
-  <div class="column character-list">
+  <div class="panel script-panel">
     <BasicMetadataForm />
-    <button
-      type="button"
-      onclick={() => {
-        setScript(tb);
-      }}>set script to tb</button
-    >
     <CurrentCharacterList />
   </div>
-  <div class="column"></div>
-  <div class="column"></div>
+  <div class="panel main-panel"></div>
+  <div class="panel options-panel">
+    <ImportExportForm />
+  </div>
 </main>
 
 <style>
@@ -27,14 +22,27 @@
     display: flex;
   }
 
-  .column {
+  .panel {
     height: 100%;
     max-height: 100%;
     overflow-y: auto;
     padding: 0.5rem;
   }
 
-  .character-list {
-    width: 300px;
+  .script-panel,
+  .options-panel {
+    width: 350px;
+  }
+
+  .script-panel {
+    border-inline-end: 2px solid var(--color-control-border-hover);
+  }
+
+  .options-panel {
+    border-inline-start: 2px solid var(--color-control-border-hover);
+  }
+
+  .main-panel {
+    flex-grow: 1;
   }
 </style>

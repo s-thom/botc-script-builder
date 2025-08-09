@@ -202,6 +202,50 @@ a {
   color: inherit;
 }
 
+.text-input {
+  background-color: var(--color-background);
+  border: 2px solid var(--color-control-border-active);
+  color: var(--color-text);
+  padding: 0.2rem;
+  border-radius: 15px;
+  width: 100%;
+  resize: vertical;
+
+  &:disabled {
+    filter: grayscale();
+  }
+
+  &:hover {
+    border-color: var(--color-control-border-hover);
+  }
+
+  &:active {
+    border-color: var(--color-control-border-active);
+  }
+}
+
+.button {
+  background-color: var(--color-control-background);
+  border: 2px solid var(--color-control-border-active);
+  color: var(--color-text);
+  padding: 0.5rem;
+  border-radius: 100vw;
+
+  &:disabled {
+    filter: grayscale();
+  }
+
+  &:hover {
+    background-color: var(--color-control-background-active);
+    border-color: var(--color-control-border-hover);
+  }
+
+  &:active {
+    background-color: var(--color-control-background-active);
+    border-color: var(--color-control-border-active);
+  }
+}
+
 :where([data-astro-image]) {
   object-fit: var(--fit);
   object-position: var(--pos);

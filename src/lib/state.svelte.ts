@@ -4,7 +4,11 @@ import type {
   ScriptCharacter,
   ScriptMetadata,
 } from "../generated/script-schema";
-import { getFullScriptCharacter, isScriptMetadata } from "./characters";
+import {
+  getFullScriptCharacter,
+  getMinimalScriptCharacter,
+  isScriptMetadata,
+} from "./characters";
 
 export interface GlobalState {
   meta: ScriptMetadata;
@@ -60,4 +64,13 @@ export function setScript(script: BloodOnTheClocktowerCustomScript) {
   globalState.meta = meta ?? { id: "_meta", name: "" };
   globalState.characters = characters;
   globalState.unknownCharacters = unknownCharacters;
+}
+
+export function getScript(): BloodOnTheClocktowerCustomScript {
+  return [
+    globalState.meta,
+    ...Object.values(globalState.characters).flatMap((characters) =>
+      characters.map((character) => getMinimalScriptCharacter(character))
+    ),
+  ];
 }
