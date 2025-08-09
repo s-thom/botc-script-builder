@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "node setup/generate-script-schema.ts && node setup/download-role-icons.ts && node setup/generate-edition-scripts.ts",
+    "setup": "node setup/generate-script-schema.ts && node setup/download-role-icons.ts && node setup/generate-edition-scripts.ts && node setup/generate-official-character-ids.ts",
     "validate": "node setup/ensure-characters-in-metadata.ts",
     "dev": "vite",
     "build": "vite build",
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.0.0",
     "@tsconfig/svelte": "^5.0.4",
+    "@types/node": "^24.2.1",
     "json-schema-to-typescript": "^15.0.4",
     "p-queue": "^8.1.0",
     "svelte": "^5.35.5",
