@@ -127,6 +127,11 @@ textarea:not([rows]) {
       --color-control-border-active: #393733;
       --color-control-border-error: #3b2a27;
 
+      --color-alignment-good: #244b85;
+      --color-alignment-evil: #7c302f;
+      --color-alignment-traveller: #5a3a7a;
+      --color-alignment-fabled: #957138;
+
       --color-reminder: #402d4f;
       --color-reminder-border: #7e6b4e;
     }
@@ -143,6 +148,11 @@ textarea:not([rows]) {
     --color-control-border-hover: #302f2c;
     --color-control-border-active: #393733;
     --color-control-border-error: #3b2a27;
+
+    --color-alignment-good: #244b85;
+    --color-alignment-evil: #7c302f;
+    --color-alignment-traveller: #5a3a7a;
+    --color-alignment-fabled: #957138;
 
     --color-reminder: #402d4f;
     --color-reminder-border: #7e6b4e;

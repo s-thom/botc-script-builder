@@ -10,6 +10,12 @@
 
   const forcedFabled = $derived.by(() => {
     const map = getEnforcedFabled(globalState);
+
+    // Remove fabled that are already in the script
+    for (const fabled of globalState.characters.fabled) {
+      map.delete(fabled.id);
+    }
+
     return Array.from(map.entries()).map(([id, reasons]) => ({
       character: CHARACTERS_BY_ID.get(id)!,
       reasons: Array.from(reasons).sort(),

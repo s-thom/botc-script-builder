@@ -59,6 +59,7 @@
     gap: 0.2rem;
     border: 2px solid transparent;
     border-radius: var(--border-radius);
+    padding-inline-end: 8px;
 
     :global(.select-icon) {
       width: 32px;
