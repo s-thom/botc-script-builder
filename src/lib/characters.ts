@@ -22,7 +22,6 @@ export const CHARACTERS_BY_TEAM = Array.from(CHARACTERS_BY_ID.values()).reduce<
     if (character.team === undefined || character.edition === "special") {
       return obj;
     }
-    console.log(character);
     obj[character.team].push(character);
     return obj;
   },

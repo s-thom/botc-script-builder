@@ -23,7 +23,7 @@
   });
 </script>
 
-{#each Object.entries(TEAM_NAMES) as [team, teamName]}
+{#each Object.entries(TEAM_NAMES) as [team, teamName] (team)}
   {#if globalState.characters[team as CharacterTeam].length > 0 || (team === "fabled" && forcedFabled.length > 0)}
     <div class="team-list">
       <h2>{teamName}</h2>

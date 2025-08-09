@@ -1,42 +1,27 @@
 <script lang="ts">
-  import type {
-    CharacterTeam,
-    ScriptCharacter,
-  } from "../../generated/script-schema";
-  import { globalState } from "../../lib/state.svelte";
-  import { filterInPlace } from "../../lib/util/arrays";
+  import type { ScriptCharacter } from "../../generated/script-schema";
   import CharacterIcon from "../common/CharacterIcon.svelte";
 
   interface Props {
-    team: CharacterTeam;
     characters: ScriptCharacter[];
     selectedSet: Set<string>;
+    onCharacterSelect?: (character: ScriptCharacter) => void;
   }
 
-  const { team, characters, selectedSet }: Props = $props();
-
-  function onSelectCharacter(character: ScriptCharacter) {
-    if (selectedSet.has(character.id)) {
-      for (const characters of Object.values(globalState.characters)) {
-        filterInPlace(characters, (c) => c.id !== character.id);
-      }
-    } else {
-      globalState.characters[character.team].push(character);
-    }
-  }
+  const { characters, selectedSet, onCharacterSelect }: Props = $props();
 </script>
 
 <ul class="character-list">
-  {#each characters as character}
+  {#each characters as character (character.id)}
     <li class="character-item">
       <button
         type="button"
         class={[
           "icon-button character",
-          `team-${team}`,
+          `team-${character.team}`,
           selectedSet.has(character.id) && "selected",
         ]}
-        onclick={() => onSelectCharacter(character)}
+        onclick={() => onCharacterSelect?.(character)}
       >
         <CharacterIcon {character} class="select-icon" />
         <p class="character-name">{character.name}</p>

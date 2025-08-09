@@ -280,15 +280,18 @@ a {
 }
 
 .team-minion,
-.team-demon {
+.team-demon,
+.team-tb {
   --color-alignment: var(--color-alignment-evil);
 }
 
-.team-traveller {
+.team-traveller,
+.team-snv {
   --color-alignment: var(--color-alignment-traveller);
 }
 
-.team-fabled {
+.team-fabled,
+.team-bmr {
   --color-alignment: var(--color-alignment-fabled);
 }
 

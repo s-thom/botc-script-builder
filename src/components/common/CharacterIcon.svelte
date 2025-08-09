@@ -18,6 +18,20 @@
         ? CHARACTER_ICONS[character.team]
         : null;
 
+    let characterId = character.id;
+    if (character.special) {
+      for (const special of character.special) {
+        if (
+          // @ts-expect-error This is a special case override
+          special.type === "botc-script-builder" &&
+          // @ts-expect-error This is a special case override
+          special.name === "replace-icon"
+        ) {
+          characterId = special.value as string;
+        }
+      }
+    }
+
     if (character.image) {
       let imageUrl: string;
       if (typeof character.image === "string") {
@@ -40,8 +54,8 @@
       return imageUrl;
     }
 
-    if (character.id in CHARACTER_ICONS) {
-      return (CHARACTER_ICONS as Record<string, string>)[character.id];
+    if (characterId in CHARACTER_ICONS) {
+      return (CHARACTER_ICONS as Record<string, string>)[characterId];
     } else {
       return teamFallbackIcon;
     }

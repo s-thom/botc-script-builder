@@ -89,7 +89,7 @@
     </li>
   {/each}
   {#if forced !== undefined && forced.length > 0}
-    {#each forced as { character, reasons }}
+    {#each forced as { character, reasons } (character.id)}
       <li
         class="detail-item"
         in:fade={{ duration: 150 }}
