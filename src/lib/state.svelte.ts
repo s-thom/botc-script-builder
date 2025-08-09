@@ -9,12 +9,18 @@ import {
   getFullScriptCharacter,
   getMinimalScriptCharacter,
   isScriptMetadata,
+  sortCharacters,
 } from "./characters";
+
+export interface BuilderOptions {
+  useSortOrder: boolean;
+}
 
 export interface GlobalState {
   meta: ScriptMetadata;
   characters: Record<CharacterTeam, ScriptCharacter[]>;
   unknownCharacters: ScriptCharacter[];
+  options: BuilderOptions;
 }
 
 export interface DerivedGlobalState {
@@ -32,6 +38,7 @@ export const globalState = $state<GlobalState>({
     fabled: [],
   },
   unknownCharacters: [],
+  options: { useSortOrder: true },
 });
 
 export function setScript(script: BloodOnTheClocktowerCustomScript) {
@@ -69,6 +76,10 @@ export function setScript(script: BloodOnTheClocktowerCustomScript) {
   globalState.meta = meta ?? { id: "_meta", name: "" };
   globalState.characters = characters;
   globalState.unknownCharacters = unknownCharacters;
+
+  if (globalState.options.useSortOrder) {
+    globalState.characters = sortCharacters(globalState.characters);
+  }
 }
 
 export function getScript(): BloodOnTheClocktowerCustomScript {

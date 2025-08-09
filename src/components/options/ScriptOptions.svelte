@@ -2,6 +2,7 @@
   import { TrashIcon } from "@lucide/svelte";
   import { globalState } from "../../lib/state.svelte";
   import ExternalImage from "../common/ExternalImage.svelte";
+  import { sortCharacters } from "../../lib/characters";
 
   function addBootleggerRule() {
     globalState.meta.bootlegger ??= [];
@@ -123,6 +124,36 @@
       >Add rule</button
     >
   </div>
+  <div class="section">
+    <h3>App options</h3>
+
+    <label class="option" for="app-sortOrder">
+      <span
+        ><input
+          id="app-sortOrder"
+          name="app-sortOrder"
+          type="checkbox"
+          autocomplete="off"
+          value="hideTitle"
+          bind:checked={
+            () => globalState.options.useSortOrder,
+            (value) => {
+              globalState.options.useSortOrder = value;
+              if (value) {
+                globalState.characters = sortCharacters(globalState.characters);
+              }
+            }
+          }
+        /> Use sort order</span
+      >
+      <p class="hint">
+        Automatically sort scripts using the official <a
+          href="https://bloodontheclocktower.com/news/sort-order-sao-update"
+          rel="external noreferrer">sort order</a
+        >.
+      </p>
+    </label>
+  </div>
 </form>
 
 <style>
@@ -159,6 +190,7 @@
 
   .hint {
     opacity: 0.7;
+    margin-top: 0.2rem;
   }
 
   .section {

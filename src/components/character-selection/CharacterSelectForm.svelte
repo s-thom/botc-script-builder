@@ -7,6 +7,7 @@
   import {
     CHARACTERS_BY_TEAM,
     getEnforcedFabled,
+    sortCharacters,
     TEAM_NAMES,
   } from "../../lib/characters";
   import { CHARACTER_METADATA } from "../../lib/metadata/characters";
@@ -65,6 +66,10 @@
       }
     } else {
       globalState.characters[character.team].push(character);
+
+      if (globalState.options.useSortOrder) {
+        globalState.characters = sortCharacters(globalState.characters);
+      }
     }
   }
 

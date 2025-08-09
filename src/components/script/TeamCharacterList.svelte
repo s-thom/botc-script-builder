@@ -9,6 +9,7 @@
   import CharacterIcon from "../common/CharacterIcon.svelte";
   import { EqualIcon, LockIcon, TrashIcon } from "@lucide/svelte";
   import { filterInPlace } from "../../lib/util/arrays";
+  import { globalState } from "../../lib/state.svelte";
 
   interface Props {
     team: CharacterTeam;
@@ -19,6 +20,8 @@
   const { team, characters, forced }: Props = $props();
 
   let invalidDrop = $state(false);
+
+  let isDragDropEnabled = $derived(!globalState.options.useSortOrder);
 
   // Validation function that sets invalidDrop state
   function onDragOver(state: DragDropState<ScriptCharacter>) {
@@ -63,21 +66,29 @@
 <ul class="list">
   {#each characters as character, index (character.id)}
     <li
-      class={["list-item", invalidDrop && "drag-error"]}
+      class={[
+        "list-item",
+        isDragDropEnabled && "drag-enabled",
+        invalidDrop && "drag-error",
+      ]}
       use:draggable={{
         container: index.toString(),
         dragData: character,
         interactive: [".delete-button"],
+        disabled: !isDragDropEnabled,
       }}
       use:droppable={{
         container: index.toString(),
         callbacks: { onDrop, onDragOver, onDragEnd },
+        disabled: !isDragDropEnabled,
       }}
       animate:flip={{ duration: 200 }}
       in:fade={{ duration: 150 }}
       out:fade={{ duration: 150 }}
     >
-      <EqualIcon aria-label={`Drag ${character.name}`} />
+      {#if isDragDropEnabled}
+        <EqualIcon aria-label={`Drag ${character.name}`} />
+      {/if}
       <CharacterIcon class="list-icon" {character} />
       <h3 class="character-name">{character.name}</h3>
       <button
@@ -129,6 +140,10 @@
       outline 0.2s ease-in-out;
     background-color: transparent;
     outline: 2px solid transparent;
+
+    &.drag-enabled {
+      cursor: move;
+    }
 
     &:global(.dragging) {
       opacity: 0.7;
