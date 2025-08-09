@@ -11,10 +11,6 @@
   import { globalState } from "../../lib/state.svelte";
   import CharacterSelectList from "./CharacterSelectList.svelte";
 
-  interface Props {}
-
-  const {}: Props = $props();
-
   const filteredCharactersByTeam = $derived.by<
     Record<CharacterTeam, ScriptCharacter[]>
   >(() => CHARACTERS_BY_TEAM);
@@ -34,9 +30,11 @@
   });
 </script>
 
+<h2>Select characters</h2>
+
 {#each Object.entries(TEAM_NAMES) as [team, teamName]}
   <div class="team-list">
-    <h2>{teamName}</h2>
+    <h3>{teamName}</h3>
     <CharacterSelectList
       team={team as CharacterTeam}
       characters={filteredCharactersByTeam[team as CharacterTeam]}

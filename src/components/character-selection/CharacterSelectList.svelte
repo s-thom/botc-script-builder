@@ -37,9 +37,13 @@
           selectedSet.has(character.id) && "selected",
         ]}
         onclick={() => onSelectCharacter(character)}
-        ><CharacterIcon {character} class="select-icon" />
-        <p class="character-name">{character.name}</p></button
       >
+        <CharacterIcon {character} class="select-icon" />
+        <p class="character-name">{character.name}</p>
+        {#if selectedSet.has(character.id)}
+          <span class="visually-hidden">(selected)</span>
+        {/if}
+      </button>
     </li>
   {/each}
 </ul>
