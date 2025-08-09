@@ -4,15 +4,16 @@
   import { flip } from "svelte/animate";
   import { fade } from "svelte/transition";
   import CharacterIcon from "../common/CharacterIcon.svelte";
-  import { EqualIcon, TrashIcon } from "@lucide/svelte";
+  import { EqualIcon, LockIcon, TrashIcon } from "@lucide/svelte";
   import { filterInPlace } from "../../lib/util/arrays";
 
   interface Props {
     team: string;
     characters: ScriptCharacter[];
+    forced?: { character: ScriptCharacter; reasons: string[] }[];
   }
 
-  const { team, characters }: Props = $props();
+  const { team, characters, forced }: Props = $props();
 
   let invalidDrop = $state(false);
 
@@ -84,6 +85,28 @@
       >
     </li>
   {/each}
+  {#if forced !== undefined && forced.length > 0}
+    {#each forced as { character, reasons }}
+      <li
+        class="detail-item"
+        in:fade={{ duration: 150 }}
+        out:fade={{ duration: 150 }}
+      >
+        <div class="detail-character">
+          <LockIcon aria-label="Required" />
+          <CharacterIcon class="list-icon" {character} />
+          <h3 class="character-name">{character.name}</h3>
+        </div>
+        <div class="detail-detail">
+          <ul class="reason-list">
+            {#each reasons as reason}
+              <li class="reason">{reason}</li>
+            {/each}
+          </ul>
+        </div>
+      </li>
+    {/each}
+  {/if}
 </ul>
 
 <style>
@@ -119,7 +142,8 @@
     }
   }
 
-  .list-item :global(.icon-container) {
+  .list-item :global(.icon-container),
+  .detail-item :global(.icon-container) {
     width: 48px;
   }
 
@@ -128,9 +152,15 @@
     font-size: 1rem;
   }
 
-  .icon-button {
-    border: none;
-    background-color: transparent;
-    color: inherit;
+  .detail-character {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .reason-list {
+    opacity: 0.7;
+    padding-inline-start: calc(24px + 1rem);
   }
 </style>

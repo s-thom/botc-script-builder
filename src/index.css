@@ -246,6 +246,12 @@ a {
   }
 }
 
+.icon-button {
+  border: none;
+  background-color: transparent;
+  color: inherit;
+}
+
 :where([data-astro-image]) {
   object-fit: var(--fit);
   object-position: var(--pos);

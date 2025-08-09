@@ -10,6 +10,7 @@
       class="text-input title-input"
       type="text"
       aria-label="Title"
+      placeholder="Script title"
       autocomplete="off"
       bind:value={globalState.meta.name}
     />
@@ -23,6 +24,7 @@
       class="text-input"
       type="text"
       aria-label="Author"
+      placeholder="Script author"
       autocomplete="off"
       bind:value={globalState.meta.author}
     />

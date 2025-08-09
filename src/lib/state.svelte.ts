@@ -5,6 +5,7 @@ import type {
   ScriptMetadata,
 } from "../generated/script-schema";
 import {
+  getEnforcedFabled,
   getFullScriptCharacter,
   getMinimalScriptCharacter,
   isScriptMetadata,
@@ -14,6 +15,10 @@ export interface GlobalState {
   meta: ScriptMetadata;
   characters: Record<CharacterTeam, ScriptCharacter[]>;
   unknownCharacters: ScriptCharacter[];
+}
+
+export interface DerivedGlobalState {
+  enforcedFabled: Map<string, Set<string>>;
 }
 
 export const globalState = $state<GlobalState>({
@@ -67,10 +72,13 @@ export function setScript(script: BloodOnTheClocktowerCustomScript) {
 }
 
 export function getScript(): BloodOnTheClocktowerCustomScript {
+  const enforcedFabled = getEnforcedFabled(globalState).keys();
+
   return [
     globalState.meta,
     ...Object.values(globalState.characters).flatMap((characters) =>
       characters.map((character) => getMinimalScriptCharacter(character))
     ),
+    ...enforcedFabled,
   ];
 }

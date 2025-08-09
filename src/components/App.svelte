@@ -1,5 +1,6 @@
 <script lang="ts">
   import ImportExportForm from "./options/ImportExportForm.svelte";
+  import ScriptOptions from "./options/ScriptOptions.svelte";
   import BasicMetadataForm from "./script/BasicMetadataForm.svelte";
   import CurrentCharacterList from "./script/CurrentCharacterList.svelte";
 </script>
@@ -12,6 +13,7 @@
   <div class="panel main-panel"></div>
   <div class="panel options-panel">
     <ImportExportForm />
+    <ScriptOptions />
   </div>
 </main>
 

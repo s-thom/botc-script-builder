@@ -94,6 +94,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    margin-block: 0.5rem;
   }
 
   .import-form {

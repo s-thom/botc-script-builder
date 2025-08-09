@@ -63,12 +63,7 @@
 </div>
 
 <style>
-  .icon-container {
-    aspect-ratio: 1/1;
-  }
-
   .icon {
     width: 100%;
-    aspect-ratio: 1/1;
   }
 </style>
