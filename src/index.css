@@ -94,6 +94,8 @@ textarea:not([rows]) {
 
   --border-radius: 0.5rem;
 
+  color-scheme: light;
+
   --color-background: #e6e3da;
   --color-text: #282828;
   --color-control-background: #dcd3bf;
@@ -103,11 +105,19 @@ textarea:not([rows]) {
   --color-control-border-active: #d0c3ab;
   --color-control-border-error: #e4a6a7;
 
+  --color-alignment: var(--color-text);
+  --color-alignment-good: #0144a7;
+  --color-alignment-evil: #940014;
+  --color-alignment-traveller: #5c2b9a;
+  --color-alignment-fabled: #d49303;
+
   --color-reminder: #6a4f7e;
   --color-reminder-border: #282828;
 
   @media (prefers-color-scheme: dark) {
     &:not([data-theme="light"]) {
+      color-scheme: dark;
+
       --color-background: #1a1918;
       --color-text: #e1e1e1;
       --color-control-background: #2c2b28;
@@ -123,6 +133,8 @@ textarea:not([rows]) {
   }
 
   &[data-theme="dark"] {
+    color-scheme: dark;
+
     --color-background: #1a1918;
     --color-text: #e1e1e1;
     --color-control-background: #2c2b28;
@@ -250,6 +262,24 @@ a {
   border: none;
   background-color: transparent;
   color: inherit;
+}
+
+.team-townsfolk,
+.team-outsider {
+  --color-alignment: var(--color-alignment-good);
+}
+
+.team-minion,
+.team-demon {
+  --color-alignment: var(--color-alignment-evil);
+}
+
+.team-traveller {
+  --color-alignment: var(--color-alignment-traveller);
+}
+
+.team-fabled {
+  --color-alignment: var(--color-alignment-fabled);
 }
 
 :where([data-astro-image]) {

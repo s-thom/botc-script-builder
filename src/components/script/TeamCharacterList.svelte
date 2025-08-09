@@ -1,5 +1,8 @@
 <script lang="ts">
-  import type { ScriptCharacter } from "../../generated/script-schema";
+  import type {
+    CharacterTeam,
+    ScriptCharacter,
+  } from "../../generated/script-schema";
   import { draggable, droppable, type DragDropState } from "@thisux/sveltednd";
   import { flip } from "svelte/animate";
   import { fade } from "svelte/transition";
@@ -8,7 +11,7 @@
   import { filterInPlace } from "../../lib/util/arrays";
 
   interface Props {
-    team: string;
+    team: CharacterTeam;
     characters: ScriptCharacter[];
     forced?: { character: ScriptCharacter; reasons: string[] }[];
   }
@@ -149,7 +152,8 @@
 
   .character-name {
     flex-grow: 1;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-family: var(--font-title);
   }
 
   .detail-character {

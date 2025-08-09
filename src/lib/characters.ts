@@ -1,5 +1,6 @@
 import data from "../data/data.json" with { type: "json" };
 import type {
+  CharacterTeam,
   OfficialCharacterDeprecated,
   OfficialCharacterID,
   ScriptCharacter,
@@ -13,6 +14,39 @@ export const CHARACTERS_BY_ID = [...data.roles, ...data.fabled].reduce<
   map.set(character.id, character as ScriptCharacter);
   return map;
 }, new Map());
+
+export const CHARACTERS_BY_TEAM = Array.from(CHARACTERS_BY_ID.values()).reduce<
+  Record<CharacterTeam, ScriptCharacter[]>
+>(
+  (obj, character) => {
+    if (character.team === undefined || character.edition === "special") {
+      return obj;
+    }
+    console.log(character);
+    obj[character.team].push(character);
+    return obj;
+  },
+  {
+    townsfolk: [],
+    outsider: [],
+    minion: [],
+    demon: [],
+    traveller: [],
+    fabled: [],
+  }
+);
+for (const characters of Object.values(CHARACTERS_BY_TEAM)) {
+  characters.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export const TEAM_NAMES: Record<CharacterTeam, string> = {
+  townsfolk: "Townsfolk",
+  outsider: "Outsiders",
+  minion: "Minions",
+  demon: "Demons",
+  traveller: "Travellers",
+  fabled: "Fabled",
+};
 
 export function getFullScriptCharacter(
   character: ScriptCharacter | OfficialCharacterID | OfficialCharacterDeprecated
