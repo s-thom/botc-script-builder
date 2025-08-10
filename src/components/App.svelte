@@ -1,5 +1,7 @@
 <script lang="ts">
+  import { globalState } from "../lib/state.svelte";
   import CharacterSelectForm from "./character-selection/CharacterSelectForm.svelte";
+  import ChecksDrawer from "./checks/ChecksDrawer.svelte";
   import ImportExportForm from "./options/ImportExportForm.svelte";
   import ScriptOptions from "./options/ScriptOptions.svelte";
   import BasicMetadataForm from "./script/BasicMetadataForm.svelte";
@@ -7,14 +9,19 @@
 </script>
 
 <main class="container">
-  <div class="panel script-panel">
+  <div class="panel panel-padding scroll-container script-panel">
     <BasicMetadataForm />
     <CurrentCharacterList />
   </div>
   <div class="panel main-panel">
-    <CharacterSelectForm />
+    <div class="panel-padding scroll-container">
+      <CharacterSelectForm />
+    </div>
+    {#if globalState.options.useChecks}
+      <ChecksDrawer />
+    {/if}
   </div>
-  <div class="panel options-panel">
+  <div class="panel panel-padding scroll-container options-panel">
     <ImportExportForm />
     <ScriptOptions />
   </div>
@@ -29,8 +36,14 @@
 
   .panel {
     height: 100%;
-    max-height: 100%;
+    max-height: 100vh;
+  }
+
+  .scroll-container {
     overflow-y: auto;
+  }
+
+  .panel-padding {
     padding: 0.5rem;
   }
 
@@ -50,5 +63,7 @@
 
   .main-panel {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
   }
 </style>

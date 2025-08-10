@@ -14,6 +14,7 @@ import {
 
 export interface BuilderOptions {
   useSortOrder: boolean;
+  useChecks: boolean;
 }
 
 export interface GlobalState {
@@ -38,7 +39,10 @@ export const globalState = $state<GlobalState>({
     fabled: [],
   },
   unknownCharacters: [],
-  options: { useSortOrder: true },
+  options: {
+    useSortOrder: true,
+    useChecks: true,
+  },
 });
 
 export function setScript(script: BloodOnTheClocktowerCustomScript) {

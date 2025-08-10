@@ -147,10 +147,26 @@
         /> Use sort order</span
       >
       <p class="hint">
-        Automatically sort scripts using the official <a
+        Automatically sort scripts using the standard <a
           href="https://bloodontheclocktower.com/news/sort-order-sao-update"
           rel="external noreferrer">sort order</a
         >.
+      </p>
+    </label>
+
+    <label class="option" for="app-checks">
+      <span
+        ><input
+          id="app-checks"
+          name="app-checks"
+          type="checkbox"
+          autocomplete="off"
+          value="hideTitle"
+          bind:checked={globalState.options.useChecks}
+        /> Enable checks</span
+      >
+      <p class="hint">
+        Check your script against common script building advice and scenarios.
       </p>
     </label>
   </div>
