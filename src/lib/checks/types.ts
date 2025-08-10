@@ -5,7 +5,7 @@ interface BaseCheckAction {
   type: string;
 }
 
-export interface AddCharacterAction {
+export interface AddCharacterAction extends BaseCheckAction {
   type: "add-character";
   id: OfficialCharacterId;
 }
@@ -23,6 +23,6 @@ export interface CheckResult {
 export interface Check<Context> {
   condition: (
     state: GlobalState
-  ) => { result: false } | { result: true; context: Context };
+  ) => { isRelevant: false } | { isRelevant: true; context: Context };
   getResult: (state: GlobalState, context: Context) => CheckResult;
 }

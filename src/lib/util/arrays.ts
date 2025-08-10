@@ -19,3 +19,18 @@ export function filterInPlace<T>(
   array.length = j;
   return array;
 }
+
+export function groupBy<K extends string, T>(
+  array: T[],
+  callback: (value: T) => K
+): Partial<Record<K, T[]>> {
+  return array.reduce(
+    (obj, value) => {
+      const key = callback(value);
+      obj[key] ??= [];
+      obj[key].push(value);
+      return obj;
+    },
+    {} as Partial<Record<K, T[]>>
+  );
+}
