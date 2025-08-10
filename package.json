@@ -13,20 +13,20 @@
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^6.0.0",
+    "@sveltejs/vite-plugin-svelte": "^6.1.1",
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^24.2.1",
     "json-schema-to-typescript": "^15.0.4",
     "p-queue": "^8.1.0",
-    "svelte": "^5.35.5",
+    "svelte": "^5.38.0",
     "svelte-check": "^4.2.2",
-    "typescript": "~5.8.3",
-    "vite": "^7.0.4"
+    "typescript": "~5.9.2",
+    "vite": "^7.1.1"
   },
   "dependencies": {
-    "@lucide/svelte": "^0.536.0",
+    "@lucide/svelte": "^0.539.0",
     "@thisux/sveltednd": "^0.0.20",
     "nanoid": "^5.1.5",
-    "zod": "^4.0.16"
+    "zod": "^4.0.17"
   }
 }
