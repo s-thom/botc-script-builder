@@ -26,6 +26,17 @@
       .then((results) => {
         checkResults = results;
         isLoading = false;
+      })
+      .catch((err: unknown) => {
+        if (
+          typeof err === "object" &&
+          err != null &&
+          "type" in err &&
+          err.type === "abort"
+        ) {
+          return;
+        }
+        console.error("Error while running checks", err);
       });
   });
 
@@ -34,14 +45,20 @@
     warning = [],
     info = [],
   } = $derived.by(() => groupBy(checkResults, (result) => result.level));
+
+  const [numErrors, numWarnings, numInfo] = $derived.by(() => [
+    error.length,
+    warning.length,
+    info.length,
+  ]);
 </script>
 
 <div class="drawer">
   <ChecksToolbar
     loading={false}
-    errors={error.length}
-    warnings={warning.length}
-    info={info.length}
+    errors={numErrors}
+    warnings={numWarnings}
+    info={numInfo}
     {onTabClick}
   />
   {#if isDrawerOpen}

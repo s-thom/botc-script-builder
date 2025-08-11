@@ -1,4 +1,5 @@
 import type { OfficialCharacterId } from "../../generated/types";
+import type { RegularCharacterTeam } from "../metadata/types";
 import type { GlobalState } from "../state.svelte";
 
 interface BaseCheckAction {
@@ -7,7 +8,7 @@ interface BaseCheckAction {
 
 export interface AddCharacterAction extends BaseCheckAction {
   type: "add-character";
-  id: OfficialCharacterId;
+  id: string;
 }
 
 export type CheckAction = AddCharacterAction;
@@ -20,9 +21,4 @@ export interface CheckResult {
   actions?: CheckAction[];
 }
 
-export interface Check<Context> {
-  condition: (
-    state: GlobalState
-  ) => { isRelevant: false } | { isRelevant: true; context: Context };
-  getResult: (state: GlobalState, context: Context) => CheckResult;
-}
+export type Check = (state: GlobalState) => CheckResult[];

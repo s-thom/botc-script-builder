@@ -6,6 +6,7 @@
     OctagonXIcon,
     TriangleAlertIcon,
   } from "@lucide/svelte";
+  import type { derived } from "svelte/store";
 
   interface Props {
     loading: boolean;
@@ -16,7 +17,7 @@
   }
 
   const { loading, errors, warnings, info, onTabClick }: Props = $props();
-  const total = errors + warnings + info;
+  const total = $derived(errors + warnings + info);
 </script>
 
 <div class="bar">
