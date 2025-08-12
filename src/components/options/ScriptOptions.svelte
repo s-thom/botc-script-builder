@@ -1,6 +1,6 @@
 <script lang="ts">
   import { TrashIcon } from "@lucide/svelte";
-  import { globalState } from "../../lib/state.svelte";
+  import { globalState, uiState } from "../../lib/state.svelte";
   import ExternalImage from "../common/ExternalImage.svelte";
   import { sortCharacters } from "../../lib/characters";
 
@@ -162,7 +162,7 @@
           type="checkbox"
           autocomplete="off"
           value="hideTitle"
-          bind:checked={globalState.options.useChecks}
+          bind:checked={uiState.useChecks}
         /> Enable checks</span
       >
       <p class="hint">

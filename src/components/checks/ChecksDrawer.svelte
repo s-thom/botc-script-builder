@@ -3,17 +3,17 @@
   import ChecksList from "./ChecksList.svelte";
   import ChecksToolbar from "./ChecksToolbar.svelte";
   import { runAllChecks } from "../../lib/checks";
-  import { globalState } from "../../lib/state.svelte";
+  import { globalState, uiState } from "../../lib/state.svelte";
   import type { CheckResult } from "../../lib/checks/types";
   import { groupBy } from "../../lib/util/arrays";
   import { delay } from "../../lib/util/async";
+  import { slide } from "svelte/transition";
 
-  let isDrawerOpen = $state(false);
   let isLoading = $state(false);
   let checkResults = $state<CheckResult[]>([]);
 
   function onTabClick() {
-    isDrawerOpen = !isDrawerOpen;
+    uiState.isChecksDrawerOpen = !uiState.isChecksDrawerOpen;
   }
 
   $effect(() => {
@@ -61,8 +61,10 @@
     info={numInfo}
     {onTabClick}
   />
-  {#if isDrawerOpen}
-    <ChecksList errors={error} warnings={warning} {info} />
+  {#if uiState.isChecksDrawerOpen}
+    <div transition:slide={{ axis: "y", duration: 100 }}>
+      <ChecksList errors={error} warnings={warning} {info} />
+    </div>
   {/if}
 </div>
 

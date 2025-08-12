@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { globalState } from "../lib/state.svelte";
+  import { uiState } from "../lib/state.svelte";
   import CharacterSelectForm from "./character-selection/CharacterSelectForm.svelte";
   import ChecksDrawer from "./checks/ChecksDrawer.svelte";
   import ImportExportForm from "./options/ImportExportForm.svelte";
@@ -17,7 +17,7 @@
     <div class="panel-padding scroll-container">
       <CharacterSelectForm />
     </div>
-    {#if globalState.options.useChecks}
+    {#if uiState.useChecks}
       <ChecksDrawer />
     {/if}
   </div>
