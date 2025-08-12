@@ -9,7 +9,7 @@
   }
 
   const { errors, warnings, info }: Props = $props();
-  const total = errors.length + warnings.length + info.length;
+  const total = $derived(errors.length + warnings.length + info.length);
 </script>
 
 {#if total === 0}

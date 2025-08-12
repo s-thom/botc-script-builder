@@ -8,6 +8,13 @@ import {
 } from "./util";
 
 export const ALL_CHECKS: Check[] = [
+  function unknownCharacters(state) {
+    return state.unknownCharacters.map((character) => ({
+      id: "app/unknown",
+      level: "error",
+      description: `Imported script uses character ${character.id}, but this app does not know what that is`,
+    }));
+  },
   function title(state) {
     return state.meta.name === ""
       ? {
@@ -189,7 +196,7 @@ export const ALL_CHECKS: Check[] = [
             CHARACTERS_BY_ID.get(requiredCharacterId);
 
           results.push({
-            id: `character/needs`,
+            id: `abilities/needs`,
             level: "error",
             description: `The ${character.name} needs ${requiredCharacterData ? requiredCharacterData.name : `"${requiredCharacterId}"`} to also be on the script`,
             actions: requiredCharacterData
@@ -210,7 +217,7 @@ export const ALL_CHECKS: Check[] = [
 
     return extraEvils.length > 1
       ? {
-          id: "balance/extra-evil",
+          id: "abilities/extra-evil",
           level: "warning",
           description: `There are multiple ways for players to be turned evil: ${extraEvils.map(({ character }) => character.name).join(", ")}`,
           remarks: [
@@ -220,5 +227,223 @@ export const ALL_CHECKS: Check[] = [
           actions: [{ type: "add-character", id: "spiritofivory" }],
         }
       : [];
+  },
+  function bluffDeaths(state) {
+    const allRegular = getAllRegularCharacters(state);
+    const { good, evil } = allRegular.reduce<{
+      good: ScriptCharacter[];
+      evil: ScriptCharacter[];
+    }>(
+      (acc, { character, meta }) => {
+        if (meta.causesExtraDeaths) {
+          switch (character.team) {
+            case "townsfolk":
+            case "outsider":
+              acc.good.push(character);
+              break;
+            case "minion":
+            case "demon":
+              acc.evil.push(character);
+              break;
+          }
+        }
+
+        return acc;
+      },
+      { good: [], evil: [] }
+    );
+
+    if (evil.length > 0 && good.length === 0) {
+      return {
+        id: "abilities/extra-deaths",
+        level: "warning",
+        description: `There are evil characters that cause additional deaths, but no good characters to bluff as: ${evil.map((character) => character.name).join(", ")}`,
+        remarks: [
+          "Good characters that cause deaths in the night can cover up evil actions",
+        ],
+      };
+    }
+    if (good.length > 0 && evil.length === 0) {
+      return {
+        id: "abilities/extra-deaths",
+        level: "warning",
+        description: `There are good characters that cause additional deaths, but no evil characters that could have caused them: ${good.map((character) => character.name).join(", ")}`,
+        remarks: [
+          "Only having good characters that cause deaths might be too confirmatory and make it difficult for evil to bluff",
+        ],
+      };
+    }
+
+    return [];
+  },
+  function bluffResurrection(state) {
+    const allRegular = getAllRegularCharacters(state);
+    const { good, evil } = allRegular.reduce<{
+      good: ScriptCharacter[];
+      evil: ScriptCharacter[];
+    }>(
+      (acc, { character, meta }) => {
+        if (meta.causesResurrection) {
+          switch (character.team) {
+            case "townsfolk":
+            case "outsider":
+              acc.good.push(character);
+              break;
+            case "minion":
+            case "demon":
+              acc.evil.push(character);
+              break;
+          }
+        }
+
+        return acc;
+      },
+      { good: [], evil: [] }
+    );
+
+    if (evil.length > 0 && good.length === 0) {
+      return {
+        id: "abilities/resurrection",
+        level: "warning",
+        description: `There are evil characters that cause resurrections, but no good characters to bluff as: ${evil.map((character) => character.name).join(", ")}`,
+        remarks: [
+          "Good characters that resurrect in the night can cover up evil actions",
+        ],
+      };
+    }
+    if (good.length > 0 && evil.length === 0) {
+      return {
+        id: "abilities/resurrection",
+        level: "warning",
+        description: `There are good characters that cause resurrections, but no evil characters that could have caused them: ${good.map((character) => character.name).join(", ")}`,
+        remarks: [
+          "Only having good characters that resurrect might be too confirmatory and make it difficult for evil to bluff",
+        ],
+      };
+    }
+
+    return [];
+  },
+  function bluffConsult(state) {
+    const allRegular = getAllRegularCharacters(state);
+    const consultCharacters = allRegular.reduce<ScriptCharacter[]>(
+      (acc, { character, meta }) => {
+        if (meta.actionType === "storyteller-consult") {
+          acc.push(character);
+        }
+
+        return acc;
+      },
+      []
+    );
+
+    if (consultCharacters.length === 1) {
+      return {
+        id: "abilities/consult",
+        level: "warning",
+        description: `There is only one character that visibly consults the storyteller: ${consultCharacters.map((character) => character.name).join(", ")}`,
+        remarks: [
+          "Only having one ability that consults the storyteller makes it difficult for evil to bluff",
+        ],
+      };
+    }
+
+    return [];
+  },
+  function outsiderMod(state) {
+    const allRegular = getAllRegularCharacters(state);
+    const numOutsiderMod = allRegular.reduce(
+      (sum, { meta }) => sum + (meta.outsiderModification ? 1 : 0),
+      0
+    );
+
+    if (numOutsiderMod === 0) {
+      return {
+        id: "abilities/outsider-mod",
+        level: "warning",
+        description:
+          "There are no abilities that modify the number of outsiders",
+        remarks: [
+          "Having a known number of outsiders makes it harder for evil to bluff as outsiders",
+          "The Sentinel fabled allows the outsider count to be modified when building a game",
+        ],
+        actions: [{ type: "add-character", id: "sentinel" }],
+      };
+    }
+
+    return [];
+  },
+  function droisoning(state) {
+    const allRegular = getAllRegularCharacters(state);
+    const numDroisoning = allRegular.reduce(
+      (sum, { meta }) => sum + (meta.causesDroison ? 1 : 0),
+      0
+    );
+
+    if (numDroisoning === 0) {
+      return {
+        id: "abilities/droison",
+        level: "warning",
+        description:
+          "There are no abilities that cause drunkenness or poisoning",
+        remarks: [
+          "Misinformation is an important part of evil's ability to steer the game",
+          "The Fibbin fabled allows the storyteller to give misinformation once per game",
+        ],
+        actions: [{ type: "add-character", id: "fibbin" }],
+      };
+    }
+
+    return [];
+  },
+  function startsKnowing(state) {
+    const allRegular = getAllRegularCharacters(state);
+    const numStartKnowing = allRegular.reduce(
+      (sum, { character, meta }) =>
+        sum +
+        (character.team === "townsfolk" && meta.actionType === "start-knowing"
+          ? 1
+          : 0),
+      0
+    );
+
+    if (numStartKnowing === 0) {
+      return {
+        id: "abilities/starts-knowing",
+        level: "warning",
+        description:
+          "There are no townsfolk abilities that start knowing information",
+      };
+    }
+
+    return [];
+  },
+  function ongoing(state) {
+    const allRegular = getAllRegularCharacters(state);
+    const numStartKnowing = allRegular.reduce(
+      (sum, { character, meta }) =>
+        sum +
+        (character.team === "townsfolk" &&
+        (meta.actionType === "each-night-all" ||
+          meta.actionType === "each-night-star")
+          ? 1
+          : 0),
+      0
+    );
+
+    if (numStartKnowing === 0) {
+      return {
+        id: "abilities/ongoing",
+        level: "warning",
+        description:
+          "There are no townsfolk abilities that learn information throughout the game",
+        remarks: [
+          "The Duchess fabled provides powerful information each night",
+        ],
+        actions: [{ type: "add-character", id: "duchess" }],
+      };
+    }
+
+    return [];
   },
 ];
