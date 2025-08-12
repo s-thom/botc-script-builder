@@ -21,4 +21,4 @@ export interface CheckResult {
   actions?: CheckAction[];
 }
 
-export type Check = (state: GlobalState) => CheckResult[];
+export type Check = (state: GlobalState) => CheckResult | CheckResult[];

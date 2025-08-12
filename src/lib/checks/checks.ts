@@ -1,47 +1,87 @@
-import type {
-  CharacterTeam,
-  ScriptCharacter,
-} from "../../generated/script-schema";
+import type { ScriptCharacter } from "../../generated/script-schema";
 import { CHARACTERS_BY_ID } from "../characters";
-import { truthyOnly } from "../util/arrays";
 import type { Check, CheckResult } from "./types";
 import {
   getAllRegularCharacters,
-  getCharacterMetadata,
   hasCharacter,
   isLikelyTeensySize,
 } from "./util";
 
 export const ALL_CHECKS: Check[] = [
-  function characterTypeCount(state) {
-    // This is likely to be one of the most complicated of the lot, as there are nuances here.
-    // I think it makes sense to bundle all this together, but it does make for some weird code.
-
-    const missingTypes: CharacterTeam[] = [];
-    if (state.characters.townsfolk.length === 0) {
-      missingTypes.push("townsfolk");
-    }
-    if (state.characters.outsider.length === 0) {
-      missingTypes.push("outsider");
-    }
-    if (state.characters.minion.length === 0) {
-      missingTypes.push("minion");
-    }
-    if (state.characters.demon.length === 0) {
-      missingTypes.push("demon");
-    }
-    if (missingTypes.length > 0) {
-      return [
-        {
-          id: "no-character-type",
-          description: `Script is missing characters of the following types: ${missingTypes.join(", ")}`,
-          level: "error",
-        },
-      ];
-    }
-
-    const allRegular = getAllRegularCharacters(state);
+  function title(state) {
+    return state.meta.name === ""
+      ? {
+          id: "meta/title",
+          level: "info",
+          description: "Script does not have a title",
+          remarks: [
+            "While optional, giving your script a title can help storytellers find interesting scripts based around concepts",
+            'If you do not want the title to be shown in the official Blood on the Clocktower app, you can enable the "Hide title" option in the script options',
+          ],
+        }
+      : [];
+  },
+  function author(state) {
+    return state.meta.name === ""
+      ? {
+          id: "meta/author",
+          level: "info",
+          description: "Script does not have an author",
+          remarks: [
+            "While optional, putting your name next to the script can help storytellers find scripts you've made if uploaded to a script sharing website",
+            "All scripts are the intellectual property of The Pandemonium Institute. Putting your name against a script does not give you any ownership over it",
+          ],
+        }
+      : [];
+  },
+  function townsfolkCount(state) {
     const isTeensy = isLikelyTeensySize(state);
+    const numTownsfolk = state.characters.townsfolk.length;
+    const baseTownsfolkCount = isTeensy ? 6 : 13;
+
+    switch (numTownsfolk) {
+      case 0:
+        return {
+          id: "teams/townsfolk",
+          level: "error",
+          description: "Script has no townsfolk",
+        };
+      case baseTownsfolkCount:
+        return [];
+      default:
+        return {
+          id: "teams/townsfolk",
+          level: "warning",
+          description: `A ${isTeensy ? "teensy " : ""}script usually has ${baseTownsfolkCount} townsfolk`,
+        };
+    }
+  },
+  function outsiderCount(state) {
+    const isTeensy = isLikelyTeensySize(state);
+    const numOutsiders = state.characters.outsider.length;
+    const baseOutsiderCount = isTeensy ? 2 : 4;
+
+    switch (numOutsiders) {
+      case 0:
+        return {
+          id: "teams/outsider",
+          level: "error",
+          description: "Script has no outsiders",
+        };
+      case baseOutsiderCount:
+        return [];
+      default:
+        return {
+          id: "teams/outsider",
+          level: "warning",
+          description: `A ${isTeensy ? "teensy " : ""}script usually has ${baseOutsiderCount} outsiders`,
+        };
+    }
+  },
+  function minionCount(state) {
+    const isTeensy = isLikelyTeensySize(state);
+    const numMinions = state.characters.minion.length;
+    const baseMinionCount = isTeensy ? 2 : 4;
 
     const extraMinionDemonCount =
       !isTeensy && state.characters.demon.length < 4;
@@ -49,94 +89,107 @@ export const ALL_CHECKS: Check[] = [
       !isTeensy &&
       state.characters.demon.length === 1 &&
       hasCharacter(state, "lordoftyphon");
+
     const extraMinionCharacters: ScriptCharacter[] = [];
-    for (const character of allRegular) {
-      const meta = getCharacterMetadata(state, character.id);
+    const allRegular = getAllRegularCharacters(state);
+    for (const { character, meta } of allRegular) {
       if (meta.needsExtraMinion) {
         extraMinionCharacters.push(character);
       }
     }
 
     const shouldHaveExtraMinion =
-      extraMinionCharacters.length > 0 ||
-      extraMinionDemonCount ||
-      extraMinionSoloLordOfTyphon;
+      !isTeensy &&
+      (extraMinionCharacters.length > 0 ||
+        extraMinionDemonCount ||
+        extraMinionSoloLordOfTyphon);
 
-    const baseNonDemonCounts: [number, number, number] = isTeensy
-      ? [6, 2, 2]
-      : [13, 4, 4];
+    const actualExpectedNumMinions =
+      baseMinionCount + (shouldHaveExtraMinion ? 1 : 0);
 
-    const results: CheckResult[] = [];
-
-    if (state.characters.townsfolk.length !== baseNonDemonCounts[0]) {
-      results.push({
-        id: "teams/townsfolk",
-        level: "warning",
-        description: `A ${isTeensy ? "teensy " : ""}script usually has ${baseNonDemonCounts[0]} townsfolk`,
-      });
+    if (numMinions === 0) {
+      return {
+        id: "teams/minion",
+        level: "error",
+        description: "Script has no minions",
+      };
     }
-    if (state.characters.outsider.length !== baseNonDemonCounts[1]) {
-      results.push({
-        id: "teams/outsiders",
-        level: "warning",
-        description: `A ${isTeensy ? "teensy " : ""}script usually has ${baseNonDemonCounts[1]} outsiders`,
-      });
-    }
-    if (!isTeensy && shouldHaveExtraMinion) {
-      if (state.characters.minion.length !== baseNonDemonCounts[2] + 1) {
-        const remarks = extraMinionCharacters.map((character) => {
-          switch (character.id) {
-            case "alchemist":
-              return "The Alchemist puts an extra minion ability into play, so adding another minion type provides ambiguity as to which minions are in play";
-            case "lilmonsta":
-              return "Lil' Monsta puts an extra minion ability into play, so adding another minion type provides ambiguity as to which minions are in play";
-            default:
-              return `${character.name} has indicated that an extra minion might be helpful`;
-          }
-        });
 
-        if (extraMinionSoloLordOfTyphon) {
-          remarks.push(
-            "A solo Lord of Typhon puts an extra minion ability into play, so adding another minion type provides ambiguity as to which minions are in play"
-          );
-        } else if (extraMinionDemonCount) {
-          remarks.push(
-            "Solo demon scripts might benefit from having an extra minion type"
-          );
+    if (numMinions === actualExpectedNumMinions) {
+      return [];
+    }
+
+    if (shouldHaveExtraMinion) {
+      const remarks = extraMinionCharacters.map((character) => {
+        switch (character.id) {
+          case "alchemist":
+            return "The Alchemist puts an extra minion ability into play, so adding another minion type provides ambiguity as to which minions are in play";
+          case "lilmonsta":
+            return "Lil' Monsta puts an extra minion ability into play, so adding another minion type provides ambiguity as to which minions are in play";
+          default:
+            return `${character.name} has indicated that an extra minion might be helpful`;
         }
+      });
 
-        results.push({
-          id: "teams/minions:extra",
-          level: "warning",
-          description: "An extra minion may be needed", // TODO: a better description when there are too many selected
-          remarks,
-        });
+      if (extraMinionSoloLordOfTyphon) {
+        remarks.push(
+          "A solo Lord of Typhon puts an extra minion ability into play, so adding another minion type provides ambiguity as to which minions are in play"
+        );
+      } else if (extraMinionDemonCount) {
+        remarks.push(
+          "Solo demon scripts might benefit from having an extra minion type"
+        );
       }
-    } else {
-      if (state.characters.minion.length < baseNonDemonCounts[2]) {
-        results.push({
-          id: "teams/minions",
-          level: "warning",
-          description: `A ${isTeensy ? "teensy " : ""}script usually has ${baseNonDemonCounts[2]} minions`,
-        });
-      }
+
+      return {
+        id: "teams/minion",
+        level: numMinions === baseMinionCount ? "info" : "warning", // Downgrade to info if at base number
+        description: `A ${isTeensy ? "teensy " : ""}script usually has ${baseMinionCount} minions, but an extra minion might help the evil team`,
+        remarks,
+      };
     }
 
-    return results;
+    return {
+      id: "teams/minion",
+      level: "warning",
+      description: `A ${isTeensy ? "teensy " : ""}script usually has ${baseMinionCount} minions`,
+    };
+  },
+  function demonCount(state) {
+    const isTeensy = isLikelyTeensySize(state);
+    const numDemons = state.characters.demon.length;
+    const baseDemonCount = isTeensy ? 2 : 4;
+
+    if (numDemons === 0) {
+      return {
+        id: "teams/demon",
+        level: "error",
+        description: "Script has no demons",
+      };
+    }
+
+    if (numDemons > baseDemonCount) {
+      return {
+        id: "teams/demon",
+        level: "warning",
+        description: `A ${isTeensy ? "teensy " : ""}script usually has ${isTeensy ? "1 to 2 " : "up to 4"} demons`,
+      };
+    }
+
+    return [];
   },
   function characterNeeds(state) {
     const results: CheckResult[] = [];
 
     const allRegular = getAllRegularCharacters(state);
-    for (const character of allRegular) {
-      const meta = getCharacterMetadata(state, character.id);
+    for (const { character, meta } of allRegular) {
       if (meta.requiresCharacters) {
         for (const requiredCharacterId of meta.requiresCharacters) {
           const requiredCharacterData =
             CHARACTERS_BY_ID.get(requiredCharacterId);
 
           results.push({
-            id: `character/requires:${character.id}+${requiredCharacterId}`,
+            id: `character/needs`,
             level: "error",
             description: `The ${character.name} needs ${requiredCharacterData ? requiredCharacterData.name : `"${requiredCharacterId}"`} to also be on the script`,
             actions: requiredCharacterData
@@ -151,24 +204,21 @@ export const ALL_CHECKS: Check[] = [
   },
   function numEvilTurn(state) {
     const allRegular = getAllRegularCharacters(state);
-    const extraEvils = allRegular.filter((character) => {
-      const meta = getCharacterMetadata(state, character.id);
+    const extraEvils = allRegular.filter(({ meta }) => {
       return meta.causesExtraEvil;
     }, 0);
 
     return extraEvils.length > 1
-      ? [
-          {
-            id: "balance/extra-evil",
-            level: "warning",
-            description: `There are multiple ways for players to be turned evil: ${extraEvils.map((character) => character.name).join(", ")}`,
-            remarks: [
-              "Having multiple evil-turned players can result in an unbeatable voting majority for evil",
-              "The Spirit of Ivory fabled prevents more than one extra player from being evil at a time",
-            ],
-            actions: [{ type: "add-character", id: "spiritofivory" }],
-          },
-        ]
+      ? {
+          id: "balance/extra-evil",
+          level: "warning",
+          description: `There are multiple ways for players to be turned evil: ${extraEvils.map(({ character }) => character.name).join(", ")}`,
+          remarks: [
+            "Having multiple evil-turned players can result in an unbeatable voting majority for evil",
+            "The Spirit of Ivory fabled prevents more than one extra player from being evil at a time",
+          ],
+          actions: [{ type: "add-character", id: "spiritofivory" }],
+        }
       : [];
   },
 ];

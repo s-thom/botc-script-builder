@@ -34,10 +34,3 @@ export function groupBy<K extends string, T>(
     {} as Partial<Record<K, T[]>>
   );
 }
-
-export function truthyOnly<T>(
-  array: (T | 0 | false | null | undefined | "")[]
-): T[] {
-  // @ts-ignore
-  return array.filter(Boolean);
-}
