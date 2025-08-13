@@ -9,11 +9,15 @@ import {
 
 export const ALL_CHECKS: Check[] = [
   function unknownCharacters(state) {
-    return state.unknownCharacters.map((character) => ({
-      id: "app/unknown",
-      level: "error",
-      description: `Imported script uses character ${character.id}, but this app does not know what that is`,
-    }));
+    if (state.unknownCharacters.length > 0) {
+      return {
+        id: "app/unknown",
+        level: "error",
+        description: `Imported script has official characters that this script builder does not know about: ${state.unknownCharacters.map((character) => character.id).join(", ")}, but this script builder does not have information about it`,
+      };
+    }
+
+    return [];
   },
   function title(state) {
     return state.meta.name === ""

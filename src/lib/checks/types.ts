@@ -1,5 +1,3 @@
-import type { OfficialCharacterId } from "../../generated/types";
-import type { RegularCharacterTeam } from "../metadata/types";
 import type { GlobalState } from "../state.svelte";
 
 interface BaseCheckAction {
