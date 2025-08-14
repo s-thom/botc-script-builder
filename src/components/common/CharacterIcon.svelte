@@ -1,22 +1,23 @@
 <script module>
-  import type {
-    CharacterTeam,
-    ScriptCharacter,
-  } from "../../generated/script-schema";
   import type { ClassValue } from "svelte/elements";
   import * as CHARACTER_ICONS from "../../generated/character-icons";
+  import type { ScriptCharacter } from "../../generated/script-schema";
   import { ALLOWED_EXTERNAL_HOSTNAMES } from "../../lib/images";
+  import { once } from "../../lib/util/functions";
 
   export interface CharacterIconProps {
     character: ScriptCharacter;
     class?: ClassValue;
   }
 
+  function getTeamFallbackIcon(character: ScriptCharacter) {
+    return character.team in CHARACTER_ICONS
+      ? CHARACTER_ICONS[character.team]
+      : null;
+  }
+
   function getCharacterIconUrl(character: ScriptCharacter): string | null {
-    const teamFallbackIcon =
-      character.team in CHARACTER_ICONS
-        ? CHARACTER_ICONS[character.team]
-        : null;
+    const teamFallbackIcon = getTeamFallbackIcon(character);
 
     let characterId = character.id;
     if (character.special) {
@@ -65,12 +66,22 @@
 <script lang="ts">
   const { character, class: className }: CharacterIconProps = $props();
 
+  const fallback = getTeamFallbackIcon(character);
   const src = getCharacterIconUrl(character);
 </script>
 
 <div class={["icon-container", className]}>
   {#if src != null}
-    <img class="icon" {src} alt="" />
+    <img
+      class="icon"
+      {src}
+      alt=""
+      onerror={once(function (this: HTMLImageElement) {
+        if (fallback) {
+          this.src = fallback;
+        }
+      })}
+    />
   {:else}
     <div class="icon icon-placeholder"></div>
   {/if}
