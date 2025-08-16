@@ -21,6 +21,11 @@ export interface GlobalState {
   characters: Record<CharacterTeam, ScriptCharacter[]>;
   unknownCharacters: ScriptCharacter[];
   options: BuilderOptions;
+  ui: {
+    useChecks: boolean;
+    isChecksDrawerOpen: boolean;
+    panelSizes: { script: number; options: number; checks: number };
+  };
 }
 
 export const globalState = $state<GlobalState>({
@@ -36,6 +41,11 @@ export const globalState = $state<GlobalState>({
   unknownCharacters: [],
   options: {
     useSortOrder: true,
+  },
+  ui: {
+    useChecks: true,
+    isChecksDrawerOpen: false,
+    panelSizes: { script: 350, options: 350, checks: 300 },
   },
 });
 
@@ -91,13 +101,3 @@ export function getScript(): BloodOnTheClocktowerCustomScript {
     ...enforcedFabled,
   ];
 }
-
-export interface UiState {
-  useChecks: boolean;
-  isChecksDrawerOpen: boolean;
-}
-
-export const uiState = $state<UiState>({
-  useChecks: true,
-  isChecksDrawerOpen: false,
-});

@@ -41,7 +41,6 @@
 <style>
   .checks-list {
     overflow-y: auto;
-    height: 300px;
   }
 
   .no-errors {

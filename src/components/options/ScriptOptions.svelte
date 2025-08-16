@@ -1,8 +1,8 @@
 <script lang="ts">
   import { TrashIcon } from "@lucide/svelte";
-  import { globalState, uiState } from "../../lib/state.svelte";
-  import ExternalImage from "../common/ExternalImage.svelte";
   import { sortCharacters } from "../../lib/characters";
+  import { globalState } from "../../lib/state.svelte";
+  import ExternalImage from "../common/ExternalImage.svelte";
 
   function addBootleggerRule() {
     globalState.meta.bootlegger ??= [];
@@ -107,7 +107,7 @@
               type="text"
               aria-label="Rule"
               autocomplete="off"
-              bind:value={rule}
+              bind:value={globalState.meta.bootlegger[index]}
             />
             <button
               type="button"
@@ -162,7 +162,7 @@
           type="checkbox"
           autocomplete="off"
           value="hideTitle"
-          bind:checked={uiState.useChecks}
+          bind:checked={globalState.ui.useChecks}
         /> Enable checks</span
       >
       <p class="hint">

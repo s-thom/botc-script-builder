@@ -85,6 +85,21 @@ textarea:not([rows]) {
 
 /* #endregion */
 
+@property --panel-script-width {
+  syntax: "<length>";
+  initial-value: 350px;
+}
+
+@property --panel-options-width {
+  syntax: "<length>";
+  initial-value: 350px;
+}
+
+@property --panel-checks-height {
+  syntax: "<length>";
+  initial-value: 300px;
+}
+
 :root {
   --token-size: 64px;
   --font-body: "Sorts Mill Goudy", Georgia, "Times New Roman", serif;
@@ -93,6 +108,7 @@ textarea:not([rows]) {
   font-family: var(--font-body);
 
   --border-radius: 0.5rem;
+  --panel-resize-handle-size: 3px;
 
   color-scheme: light;
 
@@ -219,6 +235,7 @@ body {
   margin: 0;
   background-color: var(--color-background);
   color: var(--color-text);
+  overflow-y: hidden;
 }
 
 a {
