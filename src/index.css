@@ -373,15 +373,21 @@ a {
   --color-level-border: var(--color-level-border-info);
 }
 
-:where([data-astro-image]) {
-  object-fit: var(--fit);
-  object-position: var(--pos);
-}
-:where([data-astro-image="full-width"]) {
-  width: 100%;
-}
-:where([data-astro-image="constrained"]) {
-  max-width: 100%;
+.noscript-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 2rem;
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1rem;
+
+  .status-icon {
+    width: 96px;
+    height: 96px;
+  }
 }
 
 @media print {
