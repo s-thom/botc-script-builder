@@ -3,7 +3,7 @@
   import { slide } from "svelte/transition";
   import { runAllChecks } from "../../lib/checks";
   import type { CheckResult } from "../../lib/checks/types";
-  import { globalState } from "../../lib/state.svelte";
+  import { checksState, globalState } from "../../lib/state.svelte";
   import { groupBy } from "../../lib/util/arrays";
   import { delay } from "../../lib/util/async";
   import ChecksList from "./ChecksList.svelte";
@@ -12,9 +12,6 @@
   const PANEL_MINIMUM_SIZE = 50;
   const PANEL_MINIMUM_SIZE_GRACE = 10;
   const PANEL_MAXIMUM_SIZE = 800;
-
-  let isLoading = $state(false);
-  let checkResults = $state<CheckResult[]>([]);
 
   function onTabClick() {
     globalState.ui.isChecksDrawerOpen = !globalState.ui.isChecksDrawerOpen;
@@ -98,40 +95,10 @@
     doc.addEventListener("pointerleave", removeHandlers, { once: true });
   }
 
-  $effect(() => {
-    const signal = getAbortSignal();
-    const state = $state.snapshot(globalState);
-    isLoading = true;
-
-    delay(300, signal)
-      .then(() => runAllChecks(state, signal))
-      .then((results) => {
-        checkResults = results;
-        isLoading = false;
-      })
-      .catch((err: unknown) => {
-        if (
-          typeof err === "object" &&
-          err != null &&
-          "type" in err &&
-          err.type === "abort"
-        ) {
-          return;
-        }
-        console.error("Error while running checks", err);
-      });
-  });
-
-  const {
-    error = [],
-    warning = [],
-    info = [],
-  } = $derived.by(() => groupBy(checkResults, (result) => result.level));
-
   const [numErrors, numWarnings, numInfo] = $derived.by(() => [
-    error.length,
-    warning.length,
-    info.length,
+    checksState.errors.length,
+    checksState.warnings.length,
+    checksState.infos.length,
   ]);
   const total = $derived(numErrors + numWarnings + numInfo);
 </script>
@@ -173,7 +140,7 @@
       class="resize-panel-content scroll-container"
       transition:slide={{ axis: "y", duration: 100 }}
     >
-      <ChecksList errors={error} warnings={warning} {info} />
+      <ChecksList />
     </div>
   {/if}
 </div>

@@ -1,15 +1,12 @@
 <script lang="ts">
-  import type { CheckResult } from "../../lib/checks/types";
+  import { checksState } from "../../lib/state.svelte";
   import CharacterIcon from "../common/CharacterIcon.svelte";
 
-  interface Props {
-    errors: CheckResult[];
-    warnings: CheckResult[];
-    info: CheckResult[];
-  }
-
-  const { errors, warnings, info }: Props = $props();
-  const total = $derived(errors.length + warnings.length + info.length);
+  const total = $derived(
+    checksState.errors.length +
+      checksState.warnings.length +
+      checksState.infos.length
+  );
 </script>
 
 {#if total === 0}
@@ -26,13 +23,13 @@
   </div>
 {:else}
   <ul class="checks-list">
-    {#each errors as result (result.id)}
+    {#each checksState.errors as result (result.id)}
       <li>{result.description}</li>
     {/each}
-    {#each warnings as result (result.id)}
+    {#each checksState.warnings as result (result.id)}
       <li>{result.description}</li>
     {/each}
-    {#each info as result (result.id)}
+    {#each checksState.infos as result (result.id)}
       <li>{result.description}</li>
     {/each}
   </ul>

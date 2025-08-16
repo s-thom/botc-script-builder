@@ -5,9 +5,52 @@
   import DesktopLayout from "./layouts/DesktopLayout.svelte";
   import MobileLayout from "./layouts/MobileLayout.svelte";
   import TabletLayout from "./layouts/TabletLayout.svelte";
+  import { getAbortSignal } from "svelte";
+  import { runAllChecks } from "../lib/checks";
+  import { checksState, globalState } from "../lib/state.svelte";
+  import { groupBy } from "../lib/util/arrays";
+  import { delay } from "../lib/util/async";
 
   const large = new MediaQuery("min-width: 960px");
   const medium = new MediaQuery("min-width: 600px");
+
+  $effect(() => {
+    const signal = getAbortSignal();
+    const state = $state.snapshot(globalState);
+
+    if (!globalState.ui.useChecks) {
+      return;
+    }
+
+    checksState.loading = true;
+    checksState.didError = false;
+
+    delay(300, signal)
+      .then(() => runAllChecks(state, signal))
+      .then((results) => {
+        const grouped = groupBy(results, (result) => result.level);
+
+        checksState.errors = grouped.error ?? [];
+        checksState.warnings = grouped.warning ?? [];
+        checksState.infos = grouped.info ?? [];
+        checksState.loading = false;
+        checksState.didError = false;
+      })
+      .catch((err: unknown) => {
+        if (
+          typeof err === "object" &&
+          err != null &&
+          "type" in err &&
+          err.type === "abort"
+        ) {
+          return;
+        }
+        console.error("Error while running checks", err);
+
+        checksState.loading = false;
+        checksState.didError = true;
+      });
+  });
 </script>
 
 {#if large.current}

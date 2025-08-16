@@ -3,7 +3,7 @@
 <script lang="ts">
   import { globalState } from "../../lib/state.svelte";
   import CharacterSelectForm from "../character-selection/CharacterSelectForm.svelte";
-  import ChecksDrawer from "../checks/ChecksDrawer.svelte";
+  import ChecksList from "../checks/ChecksList.svelte";
   import MobileNavigation from "../common/MobileNavigation.svelte";
   import ImportExportForm from "../options/ImportExportForm.svelte";
   import ScriptOptions from "../options/ScriptOptions.svelte";
@@ -18,7 +18,7 @@
         <ImportExportForm />
         <ScriptOptions />
       {:else if globalState.ui.screen === "checks"}
-        <ChecksDrawer />
+        <ChecksList />
       {:else}
         <BasicMetadataForm />
         <CurrentCharacterList />

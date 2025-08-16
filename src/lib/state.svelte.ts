@@ -11,6 +11,7 @@ import {
   isScriptMetadata,
   sortCharacters,
 } from "./characters";
+import type { CheckResult } from "./checks/types";
 
 export interface BuilderOptions {
   useSortOrder: boolean;
@@ -107,3 +108,19 @@ export function getScript(): BloodOnTheClocktowerCustomScript {
     ...enforcedFabled,
   ];
 }
+
+export interface ChecksState {
+  loading: boolean;
+  didError: boolean;
+  errors: CheckResult[];
+  warnings: CheckResult[];
+  infos: CheckResult[];
+}
+
+export const checksState = $state<ChecksState>({
+  loading: false,
+  didError: false,
+  errors: [],
+  warnings: [],
+  infos: [],
+});
