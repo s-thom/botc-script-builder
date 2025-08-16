@@ -1,12 +1,18 @@
 <script lang="ts">
   import {
+    Lightbulb,
+    LightbulbAutofix,
     LightbulbEmpty,
     MapVertical,
     PersonAdd,
     Settings,
     type SvgComponent,
   } from "svelte-codicons";
-  import { globalState, type GlobalState } from "../../lib/state.svelte";
+  import {
+    checksState,
+    globalState,
+    type GlobalState,
+  } from "../../lib/state.svelte";
 
   type ScreenName = GlobalState["ui"]["screen"];
 
@@ -23,6 +29,7 @@
     script: { title: "Script", icon: MapVertical },
     options: { title: "Options", icon: Settings },
     checks: { title: "Checks", icon: LightbulbEmpty },
+    "checks:about": { title: "About checks", icon: LightbulbEmpty },
     "select-characters": { title: "Roles", icon: PersonAdd },
   };
 
@@ -33,6 +40,23 @@
   }
 
   const { pages }: Props = $props();
+
+  const checksData = $derived.by(() => {
+    const allResults = [
+      ...checksState.errors,
+      ...checksState.warnings,
+      ...checksState.infos,
+    ].filter((result) => !globalState.ui.ignoredChecks.includes(result.id));
+    const hasResults = allResults.length > 0;
+
+    for (const result of allResults) {
+      if (result.actions && result.actions.length > 0) {
+        return { hasResults, hasFixes: true };
+      }
+    }
+
+    return { hasResults, hasFixes: false };
+  });
 </script>
 
 <nav>
@@ -49,7 +73,19 @@
             ]}
             onclick={setScreenHandler(page)}
           >
-            <span><IconComponent /></span>
+            <span
+              >{#if page === "checks"}
+                {#if checksData.hasFixes}
+                  <LightbulbAutofix />
+                {:else if checksData.hasResults}
+                  <Lightbulb />
+                {:else}
+                  <IconComponent />
+                {/if}
+              {:else}
+                <IconComponent />
+              {/if}</span
+            >
             <span>{PAGE_DATA[page].title}</span>
           </button>
         </li>

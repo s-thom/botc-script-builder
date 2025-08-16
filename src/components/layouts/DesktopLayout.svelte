@@ -1,6 +1,7 @@
 <script lang="ts">
   import { globalState, type GlobalState } from "../../lib/state.svelte";
   import CharacterSelectForm from "../character-selection/CharacterSelectForm.svelte";
+  import AboutChecks from "../checks/AboutChecks.svelte";
   import ChecksDrawer from "../checks/ChecksDrawer.svelte";
   import ImportExportForm from "../options/ImportExportForm.svelte";
   import ScriptOptions from "../options/ScriptOptions.svelte";
@@ -149,8 +150,12 @@
   </div>
 
   <div class="panel main-panel">
-    <div class="panel-padding scroll-container">
-      <CharacterSelectForm />
+    <div class="panel-padding main-panel scroll-container">
+      {#if globalState.ui.screen === "checks:about"}
+        <AboutChecks />
+      {:else}
+        <CharacterSelectForm />
+      {/if}
     </div>
     {#if globalState.ui.useChecks}
       <ChecksDrawer />

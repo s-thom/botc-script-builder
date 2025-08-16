@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ScriptCharacter } from "../../generated/script-schema";
+  import { globalState } from "../../lib/state.svelte";
   import CharacterIcon from "../common/CharacterIcon.svelte";
   import { nanoid } from "nanoid";
 

@@ -17,6 +17,13 @@ export interface BuilderOptions {
   useSortOrder: boolean;
 }
 
+export type AppScreen =
+  | "script"
+  | "options"
+  | "select-characters"
+  | "checks"
+  | "checks:about";
+
 export interface GlobalState {
   meta: ScriptMetadata;
   characters: Record<CharacterTeam, ScriptCharacter[]>;
@@ -25,12 +32,14 @@ export interface GlobalState {
   ui: {
     useChecks: boolean;
     isChecksDrawerOpen: boolean;
+    ignoredChecks: string[];
     panelSizes: {
       script: number;
       options: number;
       checks: number;
     };
-    screen: "script" | "options" | "select-characters" | "checks";
+    screen: AppScreen;
+    prevScreen?: AppScreen;
   };
 }
 
@@ -51,6 +60,7 @@ export const globalState = $state<GlobalState>({
   ui: {
     useChecks: true,
     isChecksDrawerOpen: false,
+    ignoredChecks: [],
     panelSizes: { script: 350, options: 350, checks: 300 },
     screen: "script",
   },

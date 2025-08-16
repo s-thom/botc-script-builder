@@ -4,6 +4,7 @@ import type { Check, CheckResult } from "./types";
 import {
   getAllRegularCharacters,
   hasCharacter,
+  hasMostTeams,
   isLikelyTeensySize,
 } from "./util";
 
@@ -190,6 +191,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function characterNeeds(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const results: CheckResult[] = [];
 
     const allRegular = getAllRegularCharacters(state);
@@ -218,6 +223,10 @@ export const ALL_CHECKS: Check[] = [
     return results;
   },
   function numEvilTurn(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const extraEvils = allRegular.filter(({ meta }) => {
       return meta.causesExtraEvil;
@@ -237,6 +246,10 @@ export const ALL_CHECKS: Check[] = [
       : [];
   },
   function bluffDeaths(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const { good, evil } = allRegular.reduce<{
       good: ScriptCharacter[];
@@ -285,6 +298,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function bluffResurrection(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const { good, evil } = allRegular.reduce<{
       good: ScriptCharacter[];
@@ -333,6 +350,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function bluffConsult(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const consultCharacters = allRegular.reduce<ScriptCharacter[]>(
       (acc, { character, meta }) => {
@@ -359,6 +380,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function outsiderMod(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const numOutsiderMod = allRegular.reduce(
       (sum, { meta }) => sum + (meta.outsiderModification ? 1 : 0),
@@ -382,6 +407,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function droisoning(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const numDroisoning = allRegular.reduce(
       (sum, { meta }) => sum + (meta.causesDroison ? 1 : 0),
@@ -405,6 +434,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function startsKnowing(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const numStartKnowing = allRegular.reduce(
       (sum, { character, meta }) =>
@@ -427,6 +460,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function ongoing(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
     const numStartKnowing = allRegular.reduce(
       (sum, { character, meta }) =>
@@ -455,6 +492,10 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function numJinxes(state) {
+    if (!hasMostTeams(state)) {
+      return [];
+    }
+
     const allRegular = getAllRegularCharacters(state);
 
     let numJinxes = 0;

@@ -3,6 +3,7 @@
 <script lang="ts">
   import { globalState } from "../../lib/state.svelte";
   import CharacterSelectForm from "../character-selection/CharacterSelectForm.svelte";
+  import AboutChecks from "../checks/AboutChecks.svelte";
   import ChecksList from "../checks/ChecksList.svelte";
   import MobileNavigation from "../common/MobileNavigation.svelte";
   import ImportExportForm from "../options/ImportExportForm.svelte";
@@ -13,25 +14,21 @@
 
 <main class="container">
   <div class="scroll-container content">
-    {#if globalState.ui.screen === "script"}
-      <div class="panel panel-padding">
+    <div class="panel panel-padding">
+      {#if globalState.ui.screen === "script"}
         <BasicMetadataForm />
         <CurrentCharacterList />
-      </div>
-    {:else if globalState.ui.screen === "select-characters"}
-      <div class="panel panel-padding">
+      {:else if globalState.ui.screen === "select-characters"}
         <CharacterSelectForm />
-      </div>
-    {:else if globalState.ui.screen === "options"}
-      <div class="panel panel-padding">
+      {:else if globalState.ui.screen === "options"}
         <ImportExportForm />
         <ScriptOptions />
-      </div>
-    {:else if globalState.ui.screen === "checks"}
-      <div class="panel panel-padding">
+      {:else if globalState.ui.screen === "checks"}
         <ChecksList />
-      </div>
-    {/if}
+      {:else if globalState.ui.screen === "checks:about"}
+        <AboutChecks />
+      {/if}
+    </div>
   </div>
 
   <MobileNavigation

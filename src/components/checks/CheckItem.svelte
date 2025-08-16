@@ -1,5 +1,14 @@
 <script lang="ts">
-  import { Error, Info, Warning, type SvgComponent } from "svelte-codicons";
+  import {
+    Close,
+    Error,
+    Info,
+    TriangleDown,
+    TriangleRight,
+    Wand,
+    Warning,
+    type SvgComponent,
+  } from "svelte-codicons";
   import type { CheckResult } from "../../lib/checks/types";
   import { CHARACTERS_BY_ID, sortCharacters } from "../../lib/characters";
   import CharacterIcon from "../common/CharacterIcon.svelte";
@@ -27,11 +36,36 @@
       globalState.characters = sortCharacters(globalState.characters);
     }
   }
+
+  function ignoreCheck() {
+    globalState.ui.ignoredChecks.push(result.id);
+  }
 </script>
 
 <div class={["check", `level-${result.level}`]}>
   <details>
-    <summary><LevelIcon /><span>{result.description}</span></summary>
+    <summary class="summary-line">
+      <span class="summary-description">
+        {#if (result.remarks && result.remarks.length > 0) || (result.actions && result.actions.length > 0)}
+          <TriangleRight
+            class="summary-icon marker marker-closed"
+            aria-label="Expand detail"
+          />
+          <TriangleDown
+            class="summary-icon marker marker-open"
+            aria-label="Collapse detail"
+          />
+        {/if}
+        <LevelIcon class="summary-icon" aria-label={result.level} />
+        <span>{result.description}</span>
+        {#if result.actions && result.actions.length > 0}
+          <Wand class="summary-icon" aria-label="Has actions" />
+        {/if}
+      </span>
+      <button type="button" class="icon-button" onclick={ignoreCheck}
+        ><Close class="summary-icon" aria-label="Ignore" /></button
+      >
+    </summary>
 
     {#if result.remarks && result.remarks.length > 0}
       <ul class="remarks-list">
@@ -70,6 +104,28 @@
     background-color: var(--color-level-background);
     border-block: 1px solid var(--color-level-border);
     padding-inline-start: 0.5rem;
+  }
+
+  .summary-line {
+    display: flex;
+    gap: 0.2rem;
+
+    :global(.summary-icon) {
+      flex-shrink: 0;
+      width: 1rem;
+      vertical-align: sub;
+    }
+  }
+
+  :global(.marker) {
+    &:global(.marker-closed):is(details[open] &),
+    &:global(.marker-open):is(details:not([open]) &) {
+      display: none;
+    }
+  }
+
+  .summary-description {
+    flex-grow: 1;
   }
 
   .actions-list {

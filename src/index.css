@@ -296,6 +296,27 @@ a {
   }
 }
 
+.link-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: var(--color-text);
+  text-decoration: underline;
+
+  &:disabled {
+    opacity: 0.7;
+  }
+
+  &:hover {
+    text-decoration: none;
+    opacity: 0.9;
+  }
+
+  &:active {
+    text-decoration: none;
+  }
+}
+
 .icon-button {
   border: none;
   background-color: transparent;
@@ -365,8 +386,23 @@ a {
   }
 }
 
-@media (min-width: 900px) {
-  .mobile-only {
+@media (max-width: 599px) {
+  .tablet-only:not(.mobile-only),
+  .desktop-only:not(.mobile-only) {
+    display: none !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 950px) {
+  .mobile-only:not(.tablet-only),
+  .desktop-only:not(.tablet-only) {
+    display: none !important;
+  }
+}
+
+@media (min-width: 960px) {
+  .mobile-only:not(.desktop-only),
+  .tablet-only:not(.desktop-only) {
     display: none !important;
   }
 }

@@ -59,6 +59,14 @@ export function hasCharacter(state: GlobalState, id: string) {
   return allCharactersCache.get(state)!.has(id);
 }
 
+export function hasMostTeams(state: GlobalState) {
+  return !(
+    state.characters.townsfolk.length === 0 ||
+    state.characters.outsider.length === 0 ||
+    state.characters.minion.length === 0
+  );
+}
+
 export function isLikelyTeensySize(state: GlobalState) {
   const size = getAllRegularCharacters(state).length;
   return (
@@ -68,36 +76,4 @@ export function isLikelyTeensySize(state: GlobalState) {
     state.characters.minion.length <= 3 &&
     state.characters.demon.length <= 3
   );
-}
-
-export function and(
-  c1: (state: GlobalState) => boolean,
-  c2: (state: GlobalState) => boolean
-): (state: GlobalState) => boolean;
-export function and(
-  c1: (state: GlobalState) => boolean,
-  c2: (state: GlobalState) => boolean,
-  c3: (state: GlobalState) => boolean
-): (state: GlobalState) => boolean;
-export function and(
-  ...conditions: ((state: GlobalState) => boolean)[]
-): (state: GlobalState) => boolean {
-  return (state) =>
-    conditions.reduce((prev, condition) => prev && condition(state), true);
-}
-
-export function or(
-  c1: (state: GlobalState) => boolean,
-  c2: (state: GlobalState) => boolean
-): (state: GlobalState) => boolean;
-export function or(
-  c1: (state: GlobalState) => boolean,
-  c2: (state: GlobalState) => boolean,
-  c3: (state: GlobalState) => boolean
-): (state: GlobalState) => boolean;
-export function or(
-  ...conditions: ((state: GlobalState) => boolean)[]
-): (state: GlobalState) => boolean {
-  return (state) =>
-    conditions.reduce((prev, condition) => prev || condition(state), false);
 }
