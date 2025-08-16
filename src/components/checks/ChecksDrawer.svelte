@@ -1,10 +1,4 @@
 <script lang="ts">
-  import {
-    CircleCheckBigIcon,
-    InfoIcon,
-    OctagonXIcon,
-    TriangleAlertIcon,
-  } from "@lucide/svelte";
   import { getAbortSignal } from "svelte";
   import { slide } from "svelte/transition";
   import { runAllChecks } from "../../lib/checks";
@@ -13,6 +7,7 @@
   import { groupBy } from "../../lib/util/arrays";
   import { delay } from "../../lib/util/async";
   import ChecksList from "./ChecksList.svelte";
+  import { CheckAll, Error, Info, Warning } from "svelte-codicons";
 
   const PANEL_MINIMUM_SIZE = 50;
   const PANEL_MINIMUM_SIZE_GRACE = 10;
@@ -161,14 +156,14 @@
   <button type="button" class="tab" onclick={onTabClick}>
     <span class="visually-hidden">Toggle checks drawer</span>
     {#if total > 0}
-      <OctagonXIcon class="tab-icon" aria-label="Errors" />
+      <Error class="tab-icon" aria-label="Errors" />
       &nbsp;{numErrors}
-      <TriangleAlertIcon class="tab-icon" aria-label="Warnings" />
+      <Warning class="tab-icon" aria-label="Warnings" />
       &nbsp;{numWarnings}
-      <InfoIcon class="tab-icon" aria-label="Info" />
+      <Info class="tab-icon" aria-label="Info" />
       &nbsp;{numInfo}
     {:else}
-      <CircleCheckBigIcon class="tab-icon" aria-label="Success" /><span>
+      <CheckAll class="tab-icon" aria-label="Success" /><span>
         &nbsp;All passed</span
       >
     {/if}

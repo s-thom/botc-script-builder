@@ -7,9 +7,9 @@
   import { flip } from "svelte/animate";
   import { fade } from "svelte/transition";
   import CharacterIcon from "../common/CharacterIcon.svelte";
-  import { EqualIcon, LockIcon, TrashIcon } from "@lucide/svelte";
   import { filterInPlace } from "../../lib/util/arrays";
   import { globalState } from "../../lib/state.svelte";
+  import { Gripper, Lock, Pinned, Trash } from "svelte-codicons";
 
   interface Props {
     team: CharacterTeam;
@@ -87,7 +87,7 @@
       out:fade={{ duration: 150 }}
     >
       {#if isDragDropEnabled}
-        <EqualIcon aria-label={`Drag ${character.name}`} />
+        <Gripper aria-label={`Drag ${character.name}`} />
       {/if}
       <CharacterIcon class="list-icon" {character} />
       <h3 class="character-name">{character.name}</h3>
@@ -95,7 +95,7 @@
         type="button"
         class="icon-button delete-button"
         onclick={() => handleDelete(character)}
-        ><TrashIcon aria-label={`Delete ${character.name}`} /></button
+        ><Trash aria-label={`Delete ${character.name}`} /></button
       >
     </li>
   {/each}
@@ -107,9 +107,12 @@
         out:fade={{ duration: 150 }}
       >
         <div class="detail-character">
-          <LockIcon aria-label="Required" />
+          {#if isDragDropEnabled}
+            <Pinned aria-label="Required" />
+          {/if}
           <CharacterIcon class="list-icon" {character} />
           <h3 class="character-name">{character.name}</h3>
+          <span class="icon-button"><Lock aria-label="Required" /></span>
         </div>
         <div class="detail-detail">
           <ul class="reason-list">

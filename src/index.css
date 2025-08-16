@@ -87,12 +87,12 @@ textarea:not([rows]) {
 
 @property --panel-script-width {
   syntax: "<length>";
-  initial-value: 350px;
+  initial-value: 25vw;
 }
 
 @property --panel-options-width {
   syntax: "<length>";
-  initial-value: 350px;
+  initial-value: 25vw;
 }
 
 @property --panel-checks-height {
@@ -336,6 +336,12 @@ a {
 
 @media not print {
   .print-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .mobile-only {
     display: none !important;
   }
 }

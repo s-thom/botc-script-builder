@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { TrashIcon } from "@lucide/svelte";
   import { sortCharacters } from "../../lib/characters";
   import { globalState } from "../../lib/state.svelte";
   import ExternalImage from "../common/ExternalImage.svelte";
+  import { Trash } from "svelte-codicons";
 
   function addBootleggerRule() {
     globalState.meta.bootlegger ??= [];
@@ -113,7 +113,7 @@
               type="button"
               class="icon-button delete-button"
               onclick={() => deleteBootleggerRule(index)}
-              ><TrashIcon aria-label="Delete rule" /></button
+              ><Trash aria-label="Delete rule" /></button
             >
           </li>
         {/each}

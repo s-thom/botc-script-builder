@@ -12,31 +12,23 @@
 </script>
 
 <main class="container">
-  <div class="scroll-container content">
-    {#if globalState.ui.screen === "script"}
-      <div class="panel panel-padding">
-        <BasicMetadataForm />
-        <CurrentCharacterList />
-      </div>
-    {:else if globalState.ui.screen === "select-characters"}
-      <div class="panel panel-padding">
-        <CharacterSelectForm />
-      </div>
-    {:else if globalState.ui.screen === "options"}
-      <div class="panel panel-padding">
+  <div class="panel detail-panel">
+    <div class="panel-padding scroll-container detail-panel-content">
+      {#if globalState.ui.screen === "options"}
         <ImportExportForm />
         <ScriptOptions />
-      </div>
-    {:else if globalState.ui.screen === "checks"}
-      <div class="panel panel-padding">
+      {:else if globalState.ui.screen === "checks"}
         <ChecksDrawer />
-      </div>
-    {/if}
+      {:else}
+        <BasicMetadataForm />
+        <CurrentCharacterList />
+      {/if}
+    </div>
+    <MobileNavigation pages={["script", "checks", "options"]} />
   </div>
-
-  <MobileNavigation
-    pages={["script", "select-characters", "checks", "options"]}
-  />
+  <div class="panel panel-padding scroll-container">
+    <CharacterSelectForm />
+  </div>
 </main>
 
 <style>
@@ -44,11 +36,18 @@
     height: 100vh;
     max-height: 100vh;
     display: flex;
-    flex-direction: column;
   }
 
-  .content {
-    flex-grow: 1;
+  .panel {
+    flex-basis: 50%;
+
+    &:not(:first-child) {
+      border-inline-start: 1px solid var(--color-control-border-hover);
+    }
+
+    &:not(:last-child) {
+      border-inline-end: 1px solid var(--color-control-border-hover);
+    }
   }
 
   .scroll-container {
@@ -57,5 +56,14 @@
 
   .panel-padding {
     padding: 0.5rem;
+  }
+
+  .detail-panel {
+    display: flex;
+    flex-direction: column;
+
+    .detail-panel-content {
+      flex-grow: 1;
+    }
   }
 </style>

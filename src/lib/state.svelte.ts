@@ -24,7 +24,12 @@ export interface GlobalState {
   ui: {
     useChecks: boolean;
     isChecksDrawerOpen: boolean;
-    panelSizes: { script: number; options: number; checks: number };
+    panelSizes: {
+      script: number;
+      options: number;
+      checks: number;
+    };
+    screen: "script" | "options" | "select-characters" | "checks";
   };
 }
 
@@ -46,6 +51,7 @@ export const globalState = $state<GlobalState>({
     useChecks: true,
     isChecksDrawerOpen: false,
     panelSizes: { script: 350, options: 350, checks: 300 },
+    screen: "script",
   },
 });
 
