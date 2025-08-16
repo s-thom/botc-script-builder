@@ -6,6 +6,8 @@
   import AboutChecks from "../checks/AboutChecks.svelte";
   import ChecksList from "../checks/ChecksList.svelte";
   import MobileNavigation from "../common/MobileNavigation.svelte";
+  import PromptDisplay from "../common/PromptDisplay.svelte";
+  import TopSticky from "../common/TopSticky.svelte";
   import ImportExportForm from "../options/ImportExportForm.svelte";
   import ScriptOptions from "../options/ScriptOptions.svelte";
   import BasicMetadataForm from "../script/BasicMetadataForm.svelte";
@@ -16,12 +18,15 @@
   <div class="scroll-container content">
     <div class="panel panel-padding">
       {#if globalState.ui.screen === "script"}
-        <BasicMetadataForm />
+        <TopSticky>
+          <BasicMetadataForm />
+          <ImportExportForm />
+          <PromptDisplay />
+        </TopSticky>
         <CurrentCharacterList />
       {:else if globalState.ui.screen === "select-characters"}
         <CharacterSelectForm />
       {:else if globalState.ui.screen === "options"}
-        <ImportExportForm />
         <ScriptOptions />
       {:else if globalState.ui.screen === "checks"}
         <ChecksList />

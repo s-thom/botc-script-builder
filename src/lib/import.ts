@@ -1,9 +1,7 @@
 import type { BloodOnTheClocktowerCustomScript } from "../generated/script-schema";
 import { rawScriptValidator } from "./parse";
 
-export async function parseOrFetchScript(
-  str: string
-): Promise<BloodOnTheClocktowerCustomScript> {
+export async function parseOrFetchScript(str: string): Promise<unknown> {
   const url = URL.parse(str);
   if (url !== null) {
     // Special handling for the scripts website
@@ -58,5 +56,11 @@ export async function parseOrFetchScript(
     throw new Error("Script is not valid JSON");
   }
 
-  return rawScriptValidator.parse(rawScriptJson);
+  return rawScriptJson;
+}
+
+export function validateScriptJson(
+  json: unknown
+): BloodOnTheClocktowerCustomScript {
+  return rawScriptValidator.parse(json);
 }

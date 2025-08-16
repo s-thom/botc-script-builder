@@ -40,6 +40,7 @@ export interface GlobalState {
     };
     screen: AppScreen;
     prevScreen?: AppScreen;
+    prompt?: string;
   };
 }
 

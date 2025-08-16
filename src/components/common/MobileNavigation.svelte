@@ -36,6 +36,7 @@
   function setScreenHandler(screen: ScreenName) {
     return () => {
       globalState.ui.screen = screen;
+      globalState.ui.prevScreen = undefined;
     };
   }
 

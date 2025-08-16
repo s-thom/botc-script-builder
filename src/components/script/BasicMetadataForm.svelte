@@ -2,7 +2,7 @@
   import { globalState } from "../../lib/state.svelte";
 </script>
 
-<form class="title-form">
+<form class="metadata-form">
   <h1 class="line">
     <label class="visually-hidden" for="script-title">Script title</label><input
       id="script-title"
@@ -32,14 +32,6 @@
 </form>
 
 <style>
-  .title-form {
-    position: sticky;
-    background-color: var(--color-background);
-    top: -0.5rem;
-    padding: 0.5rem;
-    margin: -0.5rem;
-  }
-
   .line {
     display: flex;
     align-items: center;

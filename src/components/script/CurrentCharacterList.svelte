@@ -5,6 +5,7 @@
     getEnforcedFabled,
     TEAM_NAMES,
   } from "../../lib/characters";
+  import { generatePrompt } from "../../lib/prompts";
   import { globalState } from "../../lib/state.svelte";
   import CharacterIcon from "../common/CharacterIcon.svelte";
   import TeamCharacterList from "./TeamCharacterList.svelte";
@@ -23,16 +24,23 @@
     }));
   });
 
-  const teams = Object.entries(TEAM_NAMES)
-    .map(([team, teamName]) => ({
-      team: team as CharacterTeam,
-      teamName,
-      characters: globalState.characters[team as CharacterTeam],
-      pinned: team === "fabled" ? forcedFabled : undefined,
-    }))
-    .filter(
-      ({ characters, pinned }) => characters.length + (pinned?.length ?? 0) > 0
-    );
+  const teams = $derived.by(() =>
+    Object.entries(TEAM_NAMES)
+      .map(([team, teamName]) => ({
+        team: team as CharacterTeam,
+        teamName,
+        characters: globalState.characters[team as CharacterTeam],
+        pinned: team === "fabled" ? forcedFabled : undefined,
+      }))
+      .filter(
+        ({ characters, pinned }) =>
+          characters.length + (pinned?.length ?? 0) > 0
+      )
+  );
+
+  function setPrompt() {
+    globalState.ui.prompt = generatePrompt();
+  }
 </script>
 
 {#each teams as { team, teamName, characters, pinned } (team)}
@@ -55,14 +63,14 @@
       }}
       class="info-area-icon slow-spin"
     />
-    <p>No characters!</p>
     <p>Select some characters to get started.</p>
     <button
       type="button"
-      class="button mobile-only tablet-only"
+      class="button mobile-only"
       onclick={() => (globalState.ui.screen = "select-characters")}
       >Select characters</button
     >
+    <button type="button" class="button" onclick={setPrompt}>Prompt me</button>
   </div>
 {/each}
 

@@ -34,3 +34,7 @@ export function groupBy<K extends string, T>(
     {} as Partial<Record<K, T[]>>
   );
 }
+
+export function arrayRandom<T>(array: T[]): T {
+  return array[Math.floor(Math.random() * array.length)];
+}

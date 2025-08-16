@@ -3,6 +3,8 @@
   import CharacterSelectForm from "../character-selection/CharacterSelectForm.svelte";
   import AboutChecks from "../checks/AboutChecks.svelte";
   import ChecksDrawer from "../checks/ChecksDrawer.svelte";
+  import PromptDisplay from "../common/PromptDisplay.svelte";
+  import TopSticky from "../common/TopSticky.svelte";
   import ImportExportForm from "../options/ImportExportForm.svelte";
   import ScriptOptions from "../options/ScriptOptions.svelte";
   import BasicMetadataForm from "../script/BasicMetadataForm.svelte";
@@ -133,7 +135,10 @@
 <main class="container">
   <div class="resize-panel script-panel-container panel">
     <div class="resize-panel-content panel-padding scroll-container">
-      <BasicMetadataForm />
+      <TopSticky>
+        <BasicMetadataForm />
+        <PromptDisplay />
+      </TopSticky>
       <CurrentCharacterList />
     </div>
     <!-- svelte-ignore a11y_no_interactive_element_to_noninteractive_role -->
@@ -151,11 +156,7 @@
 
   <div class="panel main-panel">
     <div class="panel-padding main-panel scroll-container">
-      {#if globalState.ui.screen === "checks:about"}
-        <AboutChecks />
-      {:else}
-        <CharacterSelectForm />
-      {/if}
+      <CharacterSelectForm />
     </div>
     {#if globalState.ui.useChecks}
       <ChecksDrawer />

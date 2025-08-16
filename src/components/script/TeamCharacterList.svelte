@@ -163,6 +163,10 @@
     }
   }
 
+  .delete-button {
+    padding: 0;
+  }
+
   .list-item :global(.icon-container),
   .detail-item :global(.icon-container) {
     width: 48px;

@@ -232,7 +232,7 @@ export const ALL_CHECKS: Check[] = [
       return meta.causesExtraEvil;
     }, 0);
 
-    return extraEvils.length > 1
+    return extraEvils.length > 1 && !hasCharacter(state, "spiritofivory")
       ? {
           id: "abilities/extra-evil",
           level: "warning",

@@ -8,6 +8,7 @@
   import { delay } from "../../lib/util/async";
   import ChecksList from "./ChecksList.svelte";
   import { CheckAll, Error, Info, Warning } from "svelte-codicons";
+  import AboutChecks from "./AboutChecks.svelte";
 
   const PANEL_MINIMUM_SIZE = 50;
   const PANEL_MINIMUM_SIZE_GRACE = 10;
@@ -140,7 +141,13 @@
       class="resize-panel-content scroll-container"
       transition:slide={{ axis: "y", duration: 100 }}
     >
-      <ChecksList />
+      {#if globalState.ui.screen === "checks:about"}
+        <div class="about-container">
+          <AboutChecks />
+        </div>
+      {:else}
+        <ChecksList />
+      {/if}
     </div>
   {/if}
 </div>
@@ -211,5 +218,9 @@
     :global(.tab-icon) {
       width: 0.8rem;
     }
+  }
+
+  .about-container {
+    padding-inline: 0.5rem;
   }
 </style>

@@ -2,8 +2,8 @@
   import { globalState } from "../../lib/state.svelte";
 </script>
 
-<h2>
-  About checks <button
+<div class="desktop-only top-links-list">
+  <button
     type="button"
     class="back-link desktop-only link-button"
     onclick={() => {
@@ -11,7 +11,9 @@
       globalState.ui.prevScreen = undefined;
     }}>Back</button
   >
-</h2>
+</div>
+
+<h2>About checks</h2>
 
 <p>
   This script builder runs a series of small checks on your script as you are
@@ -78,6 +80,12 @@
 </p>
 
 <style>
+  .top-links-list {
+    display: flex;
+    justify-content: space-between;
+    margin-block: 0.5rem;
+  }
+
   .back-link {
     font-size: 1rem;
   }

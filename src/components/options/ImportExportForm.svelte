@@ -1,12 +1,13 @@
 <script lang="ts">
+  import { slide } from "svelte/transition";
+  import { parseOrFetchScript, validateScriptJson } from "../../lib/import";
   import { getScript, globalState, setScript } from "../../lib/state.svelte";
-  import tb from "../../generated/edition-scripts/tb.json";
-  import { parseOrFetchScript } from "../../lib/import";
 
   let isShowingImport = $state(false);
   let isImporting = $state(false);
   let scriptInputValue = $state("");
   let scriptInputError = $state<string | undefined>(undefined);
+  let uploadInputError = $state<string | undefined>(undefined);
 
   function downloadJson() {
     const script = getScript();
@@ -26,15 +27,18 @@
     window.URL.revokeObjectURL(url);
   }
 
-  async function importScript(event: Event) {
+  async function onScriptInputSubmit(event: SubmitEvent) {
     event.preventDefault();
 
     isImporting = true;
     scriptInputError = undefined;
 
     try {
-      const newScript = await parseOrFetchScript(scriptInputValue);
+      const rawJson = await parseOrFetchScript(scriptInputValue);
+      const newScript = validateScriptJson(rawJson);
+
       setScript(newScript);
+
       isShowingImport = false;
     } catch (err) {
       scriptInputError = "Error importing script";
@@ -42,16 +46,40 @@
       isImporting = false;
     }
   }
-</script>
 
-<p>
-  <button
-    type="button"
-    onclick={() => {
-      setScript(tb);
-    }}>set script to tb</button
-  >
-</p>
+  async function onFileInputChange(event: Event) {
+    try {
+      isImporting = true;
+      uploadInputError = undefined;
+
+      const input = event.currentTarget as HTMLInputElement;
+      const fileList = input.files;
+      if (fileList == null || fileList.length !== 1) {
+        throw new Error("Input file list does not have 1 file");
+      }
+
+      const file = fileList[0];
+      if (file.type !== "application/json") {
+        console.warn(
+          `Uploaded file has type ${file.type}. Expected application/json`
+        );
+      }
+
+      const rawContent = await file.text();
+      const rawJson = JSON.parse(rawContent);
+
+      const newScript = validateScriptJson(rawJson);
+
+      setScript(newScript);
+
+      isShowingImport = false;
+    } catch (err) {
+      uploadInputError = "Error uploading script";
+    } finally {
+      isImporting = false;
+    }
+  }
+</script>
 
 <div class="action-list">
   <button
@@ -68,24 +96,50 @@
 </div>
 
 {#if isShowingImport}
-  <form class="import-form" onsubmit={importScript}>
-    <label for="script">Script JSON or URL</label>
-    <textarea
-      class="text-input"
-      name="script"
-      id="script"
-      required
-      bind:value={scriptInputValue}
-      aria-describedby="script-error"
-    ></textarea>
-    <button
-      type="submit"
-      class="button"
-      disabled={isImporting}
-      data-umami-event="script-import"
-    >
-      Import
-    </button>
+  <form
+    class="import-form"
+    onsubmit={onScriptInputSubmit}
+    transition:slide={{ axis: "y", duration: 150 }}
+  >
+    <fieldset class="fieldset">
+      <label for="file-upload" class="button file-upload-label"
+        >Upload .json file</label
+      >
+      <input
+        type="file"
+        name="file-upload"
+        id="file-upload"
+        class="visually-hidden-always"
+        accept="application/json,.json,text/*"
+        aria-describedby="upload-error"
+        oninput={onFileInputChange}
+      />
+      {#if uploadInputError}
+        <p id="upload-error" class="import-error">{uploadInputError}</p>
+      {/if}
+    </fieldset>
+    <fieldset class="fieldset">
+      <label for="script">Script JSON or URL</label>
+      <textarea
+        class="text-input"
+        name="script"
+        id="script"
+        required
+        bind:value={scriptInputValue}
+        aria-describedby="script-error"
+      ></textarea>
+      <button
+        type="submit"
+        class="button"
+        disabled={isImporting}
+        data-umami-event="script-import"
+      >
+        Import
+      </button>
+      {#if scriptInputError}
+        <p id="script-error" class="import-error">{scriptInputError}</p>
+      {/if}
+    </fieldset>
   </form>
 {/if}
 
@@ -94,13 +148,30 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-block: 0.5rem;
+    margin-block-end: 0.5rem;
   }
 
   .import-form {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .fieldset {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     gap: 0.2rem;
-    margin-block: 0.5rem;
+    padding: 0;
+    margin: 0;
+    border: none;
+  }
+
+  .file-upload-label {
+    text-align: center;
+  }
+
+  .import-error {
+    color: var(--color-alignment-evil);
   }
 </style>
