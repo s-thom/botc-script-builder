@@ -127,6 +127,16 @@ textarea:not([rows]) {
   --color-alignment-traveller: #5c2b9a;
   --color-alignment-fabled: #d49303;
 
+  --color-level-background: var(--color-text);
+  --color-level-border: var(--color-text);
+
+  --color-level-background-error: var(--color-background);
+  --color-level-border-error: var(--color-text);
+  --color-level-background-warning: var(--color-background);
+  --color-level-border-warning: var(--color-text);
+  --color-level-background-info: var(--color-background);
+  --color-level-border-info: var(--color-text);
+
   --color-reminder: #6a4f7e;
   --color-reminder-border: #282828;
 
@@ -311,6 +321,21 @@ a {
 .team-fabled,
 .team-bmr {
   --color-alignment: var(--color-alignment-fabled);
+}
+
+.level-error {
+  --color-level-background: var(--color-level-background-error);
+  --color-level-border: var(--color-level-border-error);
+}
+
+.level-warning {
+  --color-level-background: var(--color-level-background-warning);
+  --color-level-border: var(--color-level-border-warning);
+}
+
+.level-info {
+  --color-level-background: var(--color-level-background-info);
+  --color-level-border: var(--color-level-border-info);
 }
 
 :where([data-astro-image]) {

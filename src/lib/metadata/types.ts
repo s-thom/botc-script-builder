@@ -36,7 +36,7 @@ export interface CharacterMetadata {
   causesDroison?: boolean;
   causesMadness?: "character" | "evil";
   causesExtraEvil?: boolean;
-  causesExtraDeaths?: boolean;
+  causesExtraNightDeaths?: boolean;
   causesResurrection?: boolean;
   preventsExecution?: boolean;
   preventsNightDeath?: boolean;

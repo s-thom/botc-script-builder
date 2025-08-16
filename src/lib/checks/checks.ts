@@ -20,7 +20,7 @@ export const ALL_CHECKS: Check[] = [
     return [];
   },
   function title(state) {
-    return state.meta.name === ""
+    return state.meta.name === "" && !state.meta.hideTitle
       ? {
           id: "meta/title",
           level: "info",
@@ -33,7 +33,7 @@ export const ALL_CHECKS: Check[] = [
       : [];
   },
   function author(state) {
-    return state.meta.name === ""
+    return state.meta.name === "" && !state.meta.hideTitle
       ? {
           id: "meta/author",
           level: "info",
@@ -196,11 +196,15 @@ export const ALL_CHECKS: Check[] = [
     for (const { character, meta } of allRegular) {
       if (meta.requiresCharacters) {
         for (const requiredCharacterId of meta.requiresCharacters) {
+          if (hasCharacter(state, requiredCharacterId)) {
+            continue;
+          }
+
           const requiredCharacterData =
             CHARACTERS_BY_ID.get(requiredCharacterId);
 
           results.push({
-            id: `abilities/needs`,
+            id: `abilities/needs:${character.id}+${requiredCharacterId}`,
             level: "error",
             description: `The ${character.name} needs ${requiredCharacterData ? requiredCharacterData.name : `"${requiredCharacterId}"`} to also be on the script`,
             actions: requiredCharacterData
@@ -239,7 +243,7 @@ export const ALL_CHECKS: Check[] = [
       evil: ScriptCharacter[];
     }>(
       (acc, { character, meta }) => {
-        if (meta.causesExtraDeaths) {
+        if (meta.causesExtraNightDeaths) {
           switch (character.team) {
             case "townsfolk":
             case "outsider":
@@ -261,7 +265,7 @@ export const ALL_CHECKS: Check[] = [
       return {
         id: "abilities/extra-deaths",
         level: "warning",
-        description: `There are evil characters that cause additional deaths, but no good characters to bluff as: ${evil.map((character) => character.name).join(", ")}`,
+        description: `There are evil characters that cause additional deaths at night, but no good characters to bluff as: ${evil.map((character) => character.name).join(", ")}`,
         remarks: [
           "Good characters that cause deaths in the night can cover up evil actions",
         ],
@@ -361,7 +365,7 @@ export const ALL_CHECKS: Check[] = [
       0
     );
 
-    if (numOutsiderMod === 0) {
+    if (numOutsiderMod === 0 && !hasCharacter(state, "sentinel")) {
       return {
         id: "abilities/outsider-mod",
         level: "warning",
@@ -384,7 +388,7 @@ export const ALL_CHECKS: Check[] = [
       0
     );
 
-    if (numDroisoning === 0) {
+    if (numDroisoning === 0 && !hasCharacter(state, "fibbin")) {
       return {
         id: "abilities/droison",
         level: "warning",
@@ -435,7 +439,7 @@ export const ALL_CHECKS: Check[] = [
       0
     );
 
-    if (numStartKnowing === 0) {
+    if (numStartKnowing === 0 && !hasCharacter(state, "duchess")) {
       return {
         id: "abilities/ongoing",
         level: "warning",
@@ -445,6 +449,33 @@ export const ALL_CHECKS: Check[] = [
           "The Duchess fabled provides powerful information each night",
         ],
         actions: [{ type: "add-character", id: "duchess" }],
+      };
+    }
+
+    return [];
+  },
+  function numJinxes(state) {
+    const allRegular = getAllRegularCharacters(state);
+
+    let numJinxes = 0;
+    for (const { character } of allRegular) {
+      if (character.jinxes) {
+        for (const jinx of character.jinxes) {
+          if (hasCharacter(state, jinx.id)) {
+            numJinxes++;
+          }
+        }
+      }
+    }
+
+    if (numJinxes > 5) {
+      return {
+        id: "abilities/jinxes",
+        level: "warning",
+        description: `Script has ${numJinxes} jinxes`,
+        remarks: [
+          "Too many jinxes can lead to confusion around rules and interactions between characters on the script",
+        ],
       };
     }
 

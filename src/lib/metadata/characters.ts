@@ -144,11 +144,12 @@ export const CHARACTER_METADATA: Record<
   gambler: {
     edition: "bmr",
     actionType: "each-night-star",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   gossip: {
     edition: "bmr",
     actionType: "public-claim",
+    causesExtraNightDeaths: true,
   },
   courtier: {
     edition: "bmr",
@@ -185,12 +186,12 @@ export const CHARACTER_METADATA: Record<
   tinker: {
     edition: "bmr",
     actionType: "passive",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   moonchild: {
     edition: "bmr",
     actionType: "on-death",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   goon: {
     edition: "bmr",
@@ -205,7 +206,7 @@ export const CHARACTER_METADATA: Record<
   godfather: {
     edition: "bmr",
     actionType: "each-night-star",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
     outsiderModification: true,
   },
   devilsadvocate: {
@@ -216,7 +217,7 @@ export const CHARACTER_METADATA: Record<
   assassin: {
     edition: "bmr",
     actionType: "once-per-game",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   mastermind: {
     edition: "bmr",
@@ -235,14 +236,14 @@ export const CHARACTER_METADATA: Record<
   shabaloth: {
     edition: "bmr",
     actionType: "each-night-star",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
     causesResurrection: true,
   },
   po: {
     edition: "bmr",
     actionType: "each-night-star",
     preventsNightDeath: true,
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   apprentice: {
     edition: "bmr",
@@ -345,7 +346,6 @@ export const CHARACTER_METADATA: Record<
   witch: {
     edition: "snv",
     actionType: "each-night-all",
-    causesExtraDeaths: true,
   },
   cerenovus: {
     edition: "snv",
@@ -437,7 +437,7 @@ export const CHARACTER_METADATA: Record<
   lycanthrope: {
     edition: "kickstarter",
     actionType: "each-night-star",
-    causesExtraDeaths: false, // False because it's not on top of what the demon is doing.
+    causesExtraNightDeaths: false, // False because it's not on top of what the demon is doing.
   },
   amnesiac: {
     edition: "kickstarter",
@@ -501,7 +501,7 @@ export const CHARACTER_METADATA: Record<
   acrobat: {
     edition: "carousel",
     actionType: "each-night-star",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   puzzlemaster: {
     edition: "kickstarter",
@@ -540,7 +540,6 @@ export const CHARACTER_METADATA: Record<
   psychopath: {
     edition: "kickstarter",
     actionType: "public-claim",
-    causesExtraDeaths: true,
   },
   goblin: {
     edition: "carousel",
@@ -574,7 +573,7 @@ export const CHARACTER_METADATA: Record<
   alhadikhia: {
     edition: "kickstarter",
     actionType: "each-night-star",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   legion: {
     edition: "kickstarter",
@@ -727,7 +726,7 @@ export const CHARACTER_METADATA: Record<
   doomsayer: {
     edition: "kickstarter",
     actionType: "fabled",
-    causesExtraDeaths: true,
+    causesExtraNightDeaths: true,
   },
   duchess: {
     edition: "kickstarter",
