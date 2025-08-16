@@ -79,6 +79,17 @@
       isImporting = false;
     }
   }
+
+  function onResetClick() {
+    setScript([]);
+  }
+
+  const numCharacters = $derived.by(() =>
+    Object.values(globalState.characters).reduce(
+      (sum, team) => sum + team.length,
+      0
+    )
+  );
 </script>
 
 <div class="action-list">
@@ -93,6 +104,14 @@
     onclick={downloadJson}
     data-umami-event="script-export-json">Export JSON</button
   >
+  {#if numCharacters > 0}
+    <button
+      type="button"
+      class="button"
+      onclick={onResetClick}
+      data-umami-event="script-reset">Reset</button
+    >
+  {/if}
 </div>
 
 {#if isShowingImport}

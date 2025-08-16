@@ -29,7 +29,9 @@
       {:else if globalState.ui.screen === "options"}
         <ScriptOptions />
       {:else if globalState.ui.screen === "checks"}
-        <ChecksList />
+        <div class="reverse-padding">
+          <ChecksList />
+        </div>
       {:else if globalState.ui.screen === "checks:about"}
         <AboutChecks />
       {/if}
@@ -59,5 +61,9 @@
 
   .panel-padding {
     padding: 0.5rem;
+  }
+
+  .reverse-padding {
+    margin: 0 -0.5rem;
   }
 </style>

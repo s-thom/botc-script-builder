@@ -125,15 +125,13 @@
     <span class="visually-hidden">Toggle checks drawer</span>
     {#if total > 0}
       <Error class="tab-icon" aria-label="Errors" />
-      &nbsp;{numErrors}
+      &nbsp;{numErrors}&nbsp;
       <Warning class="tab-icon" aria-label="Warnings" />
-      &nbsp;{numWarnings}
+      &nbsp;{numWarnings}&nbsp;
       <Info class="tab-icon" aria-label="Info" />
       &nbsp;{numInfo}
     {:else}
-      <CheckAll class="tab-icon" aria-label="Success" /><span>
-        &nbsp;All passed</span
-      >
+      <CheckAll class="tab-icon" aria-label="Success" /><span> &nbsp;0</span>
     {/if}
   </button>
   {#if globalState.ui.isChecksDrawerOpen}

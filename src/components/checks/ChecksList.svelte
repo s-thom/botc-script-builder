@@ -71,7 +71,7 @@
           }}
           class="info-area-icon slow-spin"
         />
-        <p>No errors found!</p>
+        <p>All checks passed!</p>
         <p>
           This does not necessarily mean your script is ready to play. There may
           still be interactions that have undesirable consequences.

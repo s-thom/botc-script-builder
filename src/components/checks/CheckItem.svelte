@@ -102,8 +102,12 @@
 <style>
   .check {
     background-color: var(--color-level-background);
-    border-block: 1px solid var(--color-level-border);
+    border-block-start: 1px solid var(--color-level-border);
     padding-inline-start: 0.5rem;
+
+    &:is(:global(li:last-child) &) {
+      border-block-end: 1px solid var(--color-level-border);
+    }
   }
 
   .summary-line {
@@ -135,7 +139,7 @@
   }
 
   :is(.remarks-list, .actions-list):last-child {
-    margin-block-end: 0.2rem;
+    padding-block-end: 0.2rem;
   }
 
   .action-item {
@@ -149,6 +153,7 @@
     align-items: center;
     gap: 0.2rem;
     border: 2px solid var(--color-control-border-active);
+    background-color: var(--color-control-background-active);
     border-radius: var(--border-radius);
     padding-inline-end: 8px;
 
