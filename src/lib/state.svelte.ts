@@ -12,60 +12,10 @@ import {
   sortCharacters,
 } from "./characters";
 import type { CheckResult } from "./checks/types";
+import { getInitialState } from "./state";
+import type { GlobalState } from "./state/types";
 
-export interface BuilderOptions {
-  useSortOrder: boolean;
-}
-
-export type AppScreen =
-  | "script"
-  | "options"
-  | "select-characters"
-  | "checks"
-  | "checks:about";
-
-export interface GlobalState {
-  meta: ScriptMetadata;
-  characters: Record<CharacterTeam, ScriptCharacter[]>;
-  unknownCharacters: ScriptCharacter[];
-  options: BuilderOptions;
-  ui: {
-    useChecks: boolean;
-    isChecksDrawerOpen: boolean;
-    ignoredChecks: string[];
-    panelSizes: {
-      script: number;
-      options: number;
-      checks: number;
-    };
-    screen: AppScreen;
-    prevScreen?: AppScreen;
-    prompt?: string;
-  };
-}
-
-export const globalState = $state<GlobalState>({
-  meta: { id: "_meta", name: "" },
-  characters: {
-    townsfolk: [],
-    outsider: [],
-    minion: [],
-    demon: [],
-    traveller: [],
-    fabled: [],
-  },
-  unknownCharacters: [],
-  options: {
-    useSortOrder: true,
-  },
-  ui: {
-    useChecks: true,
-    isChecksDrawerOpen: false,
-    ignoredChecks: [],
-    panelSizes: { script: 350, options: 350, checks: 300 },
-    screen: "script",
-  },
-});
+export const globalState = $state<GlobalState>(getInitialState());
 
 export function setScript(script: BloodOnTheClocktowerCustomScript) {
   let meta: ScriptMetadata | undefined;

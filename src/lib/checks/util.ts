@@ -2,7 +2,7 @@ import type { ScriptCharacter } from "../../generated/script-schema";
 import type { OfficialCharacterId } from "../../generated/types";
 import { CHARACTER_METADATA } from "../metadata/characters";
 import type { CharacterMetadata } from "../metadata/types";
-import type { GlobalState } from "../state.svelte";
+import type { GlobalState } from "../state/types";
 
 const regularCharactersCache = new WeakMap<
   GlobalState,

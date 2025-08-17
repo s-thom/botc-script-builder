@@ -7,7 +7,7 @@ import type {
   ScriptMetadata,
 } from "../generated/script-schema";
 import type { OfficialCharacterId } from "../generated/types";
-import type { GlobalState } from "./state.svelte";
+import type { GlobalState } from "./state/types";
 
 export const CHARACTERS_BY_ID = [...data.roles, ...data.fabled].reduce<
   Map<string, ScriptCharacter>

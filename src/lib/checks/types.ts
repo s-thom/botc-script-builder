@@ -1,4 +1,4 @@
-import type { GlobalState } from "../state.svelte";
+import type { GlobalState } from "../state/types";
 
 interface BaseCheckAction {
   type: string;

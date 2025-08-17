@@ -9,7 +9,8 @@
   import { runAllChecks } from "../lib/checks";
   import { checksState, globalState } from "../lib/state.svelte";
   import { groupBy } from "../lib/util/arrays";
-  import { delay } from "../lib/util/async";
+  import { delay, scheduleTask } from "../lib/util/async";
+  import { persistState } from "../lib/state";
 
   const large = new MediaQuery("min-width: 960px");
   const medium = new MediaQuery("min-width: 600px");
@@ -49,6 +50,25 @@
 
         checksState.loading = false;
         checksState.didError = true;
+      });
+  });
+
+  $effect(() => {
+    const signal = getAbortSignal();
+    const state = $state.snapshot(globalState);
+
+    delay(300, signal)
+      .then(() => scheduleTask(() => persistState(state), signal))
+      .catch((err: unknown) => {
+        if (
+          typeof err === "object" &&
+          err != null &&
+          "type" in err &&
+          err.type === "abort"
+        ) {
+          return;
+        }
+        console.error("Error while persisting state", err);
       });
   });
 </script>

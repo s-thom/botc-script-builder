@@ -8,8 +8,8 @@
   import { fade } from "svelte/transition";
   import CharacterIcon from "../common/CharacterIcon.svelte";
   import { filterInPlace } from "../../lib/util/arrays";
-  import { globalState } from "../../lib/state.svelte";
   import { Gripper, Lock, Pinned, Trash } from "svelte-codicons";
+  import { globalState } from "../../lib/state.svelte";
 
   interface Props {
     team: CharacterTeam;

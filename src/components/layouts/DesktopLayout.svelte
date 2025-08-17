@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { globalState, type GlobalState } from "../../lib/state.svelte";
+  import { globalState } from "../../lib/state.svelte";
+  import type { GlobalState } from "../../lib/state/types";
   import CharacterSelectForm from "../character-selection/CharacterSelectForm.svelte";
-  import AboutChecks from "../checks/AboutChecks.svelte";
   import ChecksDrawer from "../checks/ChecksDrawer.svelte";
   import PromptDisplay from "../common/PromptDisplay.svelte";
   import TopSticky from "../common/TopSticky.svelte";

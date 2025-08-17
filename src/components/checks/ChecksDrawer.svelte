@@ -1,14 +1,9 @@
 <script lang="ts">
-  import { getAbortSignal } from "svelte";
-  import { slide } from "svelte/transition";
-  import { runAllChecks } from "../../lib/checks";
-  import type { CheckResult } from "../../lib/checks/types";
-  import { checksState, globalState } from "../../lib/state.svelte";
-  import { groupBy } from "../../lib/util/arrays";
-  import { delay } from "../../lib/util/async";
-  import ChecksList from "./ChecksList.svelte";
   import { CheckAll, Error, Info, Warning } from "svelte-codicons";
+  import { slide } from "svelte/transition";
+  import { checksState, globalState } from "../../lib/state.svelte";
   import AboutChecks from "./AboutChecks.svelte";
+  import ChecksList from "./ChecksList.svelte";
 
   const PANEL_MINIMUM_SIZE = 50;
   const PANEL_MINIMUM_SIZE_GRACE = 10;

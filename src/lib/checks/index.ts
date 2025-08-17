@@ -1,4 +1,4 @@
-import type { GlobalState } from "../state.svelte";
+import type { GlobalState } from "../state/types";
 import { scheduleTask } from "../util/async";
 import { ALL_CHECKS } from "./checks";
 import type { CheckResult } from "./types";
