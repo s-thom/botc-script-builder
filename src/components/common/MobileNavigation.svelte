@@ -1,15 +1,16 @@
 <script lang="ts">
   import {
-    Lightbulb,
-    LightbulbAutofix,
     LightbulbEmpty,
     MapVertical,
     PersonAdd,
+    Search,
+    SearchFuzzy,
+    SearchSparkle,
     Settings,
     type SvgComponent,
   } from "svelte-codicons";
-  import type { GlobalState } from "../../lib/state/types";
   import { checksState, globalState } from "../../lib/state.svelte";
+  import type { GlobalState } from "../../lib/state/types";
 
   type ScreenName = GlobalState["ui"]["screen"];
 
@@ -25,7 +26,7 @@
   const PAGE_DATA: Record<ScreenName, PageInfo> = {
     script: { title: "Script", icon: MapVertical },
     options: { title: "Options", icon: Settings },
-    checks: { title: "Checks", icon: LightbulbEmpty },
+    checks: { title: "Checks", icon: Search },
     "checks:about": { title: "About checks", icon: LightbulbEmpty },
     "select-characters": { title: "Roles", icon: PersonAdd },
   };
@@ -74,14 +75,14 @@
             <span
               >{#if page === "checks"}
                 {#if checksData.hasFixes}
-                  <LightbulbAutofix />
+                  <SearchSparkle width={24} height={24} />
                 {:else if checksData.hasResults}
-                  <Lightbulb />
+                  <SearchFuzzy width={24} height={24} />
                 {:else}
-                  <IconComponent />
+                  <IconComponent width={24} height={24} />
                 {/if}
               {:else}
-                <IconComponent />
+                <IconComponent width={24} height={24} />
               {/if}</span
             >
             <span>{PAGE_DATA[page].title}</span>

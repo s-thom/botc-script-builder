@@ -48,22 +48,22 @@
       <span class="summary-description">
         {#if (result.remarks && result.remarks.length > 0) || (result.actions && result.actions.length > 0)}
           <TriangleRight
-            class="summary-icon marker marker-closed"
+            class="inline-icon summary-icon marker marker-closed"
             aria-label="Expand detail"
           />
           <TriangleDown
-            class="summary-icon marker marker-open"
+            class="inline-icon summary-icon marker marker-open"
             aria-label="Collapse detail"
           />
         {/if}
-        <LevelIcon class="summary-icon" aria-label={result.level} />
+        <LevelIcon class="inline-icon summary-icon" aria-label={result.level} />
         <span>{result.description}</span>
         {#if result.actions && result.actions.length > 0}
-          <Wand class="summary-icon" aria-label="Has actions" />
+          <Wand class="inline-icon summary-icon" aria-label="Has actions" />
         {/if}
       </span>
       <button type="button" class="icon-button" onclick={ignoreCheck}
-        ><Close class="summary-icon" aria-label="Ignore" /></button
+        ><Close class="inline-icon summary-icon" aria-label="Ignore" /></button
       >
     </summary>
 
@@ -114,10 +114,8 @@
     display: flex;
     gap: 0.2rem;
 
-    :global(.summary-icon) {
+    :global(.inline-icon summary-icon) {
       flex-shrink: 0;
-      width: 1rem;
-      vertical-align: sub;
     }
   }
 

@@ -339,6 +339,12 @@ a {
   color: inherit;
 }
 
+.inline-icon {
+  width: 1rem;
+  height: 1rem;
+  vertical-align: sub;
+}
+
 .team-townsfolk,
 .team-outsider {
   --color-alignment: var(--color-alignment-good);
@@ -373,6 +379,26 @@ a {
 .level-info {
   --color-level-background: var(--color-level-background-info);
   --color-level-border: var(--color-level-border-info);
+}
+
+.flow > * + * {
+  margin-block-start: var(--flow-space, 1em);
+}
+
+:is(h1, h2, h3, blockquote):not(:first-child) {
+  --flow-space: 1.5em;
+}
+
+:is(h1, h2, h3) + * {
+  --flow-space: 0.8em;
+}
+
+:is(li) + * {
+  --flow-space: 0.5em;
+}
+
+.tiny-flow > * {
+  --flow-space: 0.5em;
 }
 
 .noscript-area {

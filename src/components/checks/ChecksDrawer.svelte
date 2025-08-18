@@ -1,5 +1,13 @@
 <script lang="ts">
-  import { CheckAll, Error, Info, Warning } from "svelte-codicons";
+  import {
+    CheckAll,
+    Error,
+    Info,
+    Search,
+    SearchFuzzy,
+    SearchSparkle,
+    Warning,
+  } from "svelte-codicons";
   import { slide } from "svelte/transition";
   import { checksState, globalState } from "../../lib/state.svelte";
   import AboutChecks from "./AboutChecks.svelte";
@@ -91,12 +99,42 @@
     doc.addEventListener("pointerleave", removeHandlers, { once: true });
   }
 
-  const [numErrors, numWarnings, numInfo] = $derived.by(() => [
-    checksState.errors.length,
-    checksState.warnings.length,
-    checksState.infos.length,
-  ]);
-  const total = $derived(numErrors + numWarnings + numInfo);
+  const checksData = $derived.by(() => {
+    const filteredErrors = checksState.errors.filter(
+      (result) => !globalState.ui.ignoredChecks.includes(result.id)
+    );
+    const filteredWarnings = checksState.warnings.filter(
+      (result) => !globalState.ui.ignoredChecks.includes(result.id)
+    );
+    const filteredInfos = checksState.infos.filter(
+      (result) => !globalState.ui.ignoredChecks.includes(result.id)
+    );
+
+    const allResults = [
+      ...filteredErrors,
+      ...filteredWarnings,
+      ...filteredInfos,
+    ];
+    const hasResults = allResults.length > 0;
+
+    let hasFixes = false;
+    for (const result of allResults) {
+      if (result.actions && result.actions.length > 0) {
+        hasFixes = true;
+        break;
+      }
+    }
+
+    return {
+      hasResults,
+      hasFixes,
+      numErrors: filteredErrors.length,
+      numWarnings: filteredWarnings.length,
+      numInfo: filteredInfos.length,
+      total:
+        filteredErrors.length + filteredWarnings.length + filteredInfos.length,
+    };
+  });
 </script>
 
 <div
@@ -117,16 +155,23 @@
     ><span class="visually-hidden">Change checks panel size</span></button
   >
   <button type="button" class="tab" onclick={onTabClick}>
-    <span class="visually-hidden">Toggle checks drawer</span>
-    {#if total > 0}
-      <Error class="tab-icon" aria-label="Errors" />
-      &nbsp;{numErrors}&nbsp;
-      <Warning class="tab-icon" aria-label="Warnings" />
-      &nbsp;{numWarnings}&nbsp;
-      <Info class="tab-icon" aria-label="Info" />
-      &nbsp;{numInfo}
+    {#if checksData.hasFixes}
+      <SearchSparkle class="inline-icon" />
+    {:else if checksData.hasResults}
+      <SearchFuzzy class="inline-icon" />
     {:else}
-      <CheckAll class="tab-icon" aria-label="Success" /><span> &nbsp;0</span>
+      <Search class="inline-icon" />
+    {/if}&numsp;
+    <span class="visually-hidden">Toggle checks drawer</span>
+    {#if checksData.total > 0}
+      <Error class="inline-icon" aria-label="Errors" />
+      &nbsp;{checksData.numErrors}&nbsp;
+      <Warning class="inline-icon" aria-label="Warnings" />
+      &nbsp;{checksData.numWarnings}&nbsp;
+      <Info class="inline-icon" aria-label="Info" />
+      &nbsp;{checksData.numInfo}
+    {:else}
+      <CheckAll class="inline-icon" aria-label="Success" /><span> &nbsp;0</span>
     {/if}
   </button>
   {#if globalState.ui.isChecksDrawerOpen}
@@ -199,6 +244,7 @@
       var(--color-control-border-hover);
     border-inline-start: var(--panel-resize-handle-size) solid
       var(--color-control-border-hover);
+    padding: 0.2rem;
 
     display: flex;
     align-items: center;

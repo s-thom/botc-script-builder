@@ -112,6 +112,7 @@
     gap: 0.5rem;
     align-items: center;
     justify-content: center;
+    margin: 0.5rem;
 
     :global(.info-area-icon) {
       width: 128px;
