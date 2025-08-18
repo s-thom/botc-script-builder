@@ -185,13 +185,19 @@
 <style>
   .container {
     height: 100vh;
+    height: 100svh;
+    height: 100dvh;
     max-height: 100vh;
+    max-height: 100svh;
+    max-height: 100dvh;
     display: flex;
   }
 
   .panel {
     height: 100%;
     max-height: 100vh;
+    max-height: 100svh;
+    max-height: 100dvh;
   }
 
   .scroll-container {
@@ -227,6 +233,8 @@
 
   .panel-resize-handle {
     height: 100vh;
+    height: 100svh;
+    height: 100dvh;
     width: var(--panel-resize-handle-size);
     background-color: var(--color-control-border-hover);
     border: none;

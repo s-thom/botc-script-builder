@@ -44,7 +44,11 @@
 <style>
   .container {
     height: 100vh;
+    height: 100svh;
+    height: 100dvh;
     max-height: 100vh;
+    max-height: 100svh;
+    max-height: 100dvh;
     display: flex;
   }
 
