@@ -157,7 +157,7 @@
   </div>
 
   <div class="panel main-panel">
-    <div class="panel-padding main-panel scroll-container">
+    <div class="panel-padding main-panel-content scroll-container">
       <CharacterSelectForm />
     </div>
     {#if globalState.ui.useChecks}
@@ -232,6 +232,13 @@
   }
 
   .main-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .main-panel-content {
     flex-grow: 1;
   }
 

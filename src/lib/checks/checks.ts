@@ -1,5 +1,5 @@
 import type { ScriptCharacter } from "../../generated/script-schema";
-import { CHARACTERS_BY_ID } from "../characters";
+import { CHARACTERS_BY_ID, normaliseCharacterId } from "../characters";
 import type { Check, CheckResult } from "./types";
 import {
   getAllRegularCharacters,
@@ -502,7 +502,7 @@ export const ALL_CHECKS: Check[] = [
     for (const { character } of allRegular) {
       if (character.jinxes) {
         for (const jinx of character.jinxes) {
-          if (hasCharacter(state, jinx.id)) {
+          if (hasCharacter(state, normaliseCharacterId(jinx.id))) {
             numJinxes++;
           }
         }

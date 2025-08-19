@@ -10,6 +10,7 @@
   import { filterInPlace } from "../../lib/util/arrays";
   import { Gripper, Lock, Pinned, Trash } from "svelte-codicons";
   import { globalState } from "../../lib/state.svelte";
+  import CharacterItem from "./CharacterItem.svelte";
 
   interface Props {
     team: CharacterTeam;
@@ -74,7 +75,7 @@
       use:draggable={{
         container: index.toString(),
         dragData: character,
-        interactive: [".delete-button"],
+        interactive: [".no-drag"],
         disabled: !isDragDropEnabled,
       }}
       use:droppable={{
@@ -86,18 +87,11 @@
       in:fade={{ duration: 150 }}
       out:fade={{ duration: 150 }}
     >
-      {#if isDragDropEnabled}
-        <Gripper aria-label={`Drag ${character.name}`} />
-      {/if}
-      <CharacterIcon class="list-icon" {character} />
-      <h3 class="character-name">{character.name}</h3>
-      <button
-        type="button"
-        class="icon-button delete-button"
-        onclick={() => handleDelete(character)}
-        data-umami-event="script-character-remove"
-        ><Trash aria-label={`Remove ${character.name}`} /></button
-      >
+      <CharacterItem
+        {character}
+        showGripper={isDragDropEnabled}
+        onDeleteClick={() => handleDelete(character)}
+      />
     </li>
   {/each}
   {#if forced !== undefined && forced.length > 0}
@@ -107,21 +101,13 @@
         in:fade={{ duration: 150 }}
         out:fade={{ duration: 150 }}
       >
-        <div class="detail-character">
-          {#if isDragDropEnabled}
-            <Pinned aria-label="Required" />
-          {/if}
-          <CharacterIcon class="list-icon" {character} />
-          <h3 class="character-name">{character.name}</h3>
-          <span class="icon-button"><Lock aria-label="Required" /></span>
-        </div>
-        <div class="detail-detail">
-          <ul class="reason-list">
-            {#each reasons as reason}
-              <li class="reason">{reason}</li>
-            {/each}
-          </ul>
-        </div>
+        <CharacterItem
+          {character}
+          showGripper={isDragDropEnabled}
+          showPinned
+          onDeleteClick={() => {}}
+          remarks={reasons}
+        />
       </li>
     {/each}
   {/if}
@@ -134,10 +120,6 @@
   }
 
   .list-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0 0.5rem;
     border-radius: var(--border-radius);
     transition:
       background-color 0.2s ease-in-out,
@@ -162,32 +144,5 @@
         outline: 2px solid var(--color-control-border-error);
       }
     }
-  }
-
-  .delete-button {
-    padding: 0;
-  }
-
-  .list-item :global(.icon-container),
-  .detail-item :global(.icon-container) {
-    width: 48px;
-  }
-
-  .character-name {
-    flex-grow: 1;
-    font-size: 1.2rem;
-    font-family: var(--font-title);
-  }
-
-  .detail-character {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0 0.5rem;
-  }
-
-  .reason-list {
-    opacity: 0.7;
-    padding-inline-start: calc(24px + 1rem);
   }
 </style>

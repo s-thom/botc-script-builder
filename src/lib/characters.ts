@@ -48,7 +48,7 @@ export const TEAM_NAMES: Record<CharacterTeam, string> = {
   fabled: "Fabled",
 };
 
-function normaliseCharacterId(id: string): string {
+export function normaliseCharacterId(id: string): string {
   return id.toLowerCase().replace(/_/g, "");
 }
 
@@ -126,7 +126,7 @@ export function getEnforcedFabled(
 
     if (character.jinxes) {
       for (const jinx of character.jinxes) {
-        if (allCharactersMap.has(jinx.id)) {
+        if (allCharactersMap.has(normaliseCharacterId(jinx.id))) {
           addFabledReason("djinn", "Script contains jinxes");
         }
       }
