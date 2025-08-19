@@ -3,6 +3,7 @@
   import type { GlobalState } from "../../lib/state/types";
   import CharacterSelectForm from "../character-selection/CharacterSelectForm.svelte";
   import ChecksDrawer from "../checks/ChecksDrawer.svelte";
+  import AboutSection from "../common/AboutSection.svelte";
   import PromptDisplay from "../common/PromptDisplay.svelte";
   import TopSticky from "../common/TopSticky.svelte";
   import ImportExportForm from "../options/ImportExportForm.svelte";
@@ -180,6 +181,7 @@
     <div class="resize-panel-content panel-padding scroll-container">
       <ImportExportForm />
       <ScriptOptions />
+      <AboutSection />
     </div>
   </div>
 </main>
@@ -208,6 +210,8 @@
 
   .panel-padding {
     padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
   }
 
   .resize-panel {
@@ -229,8 +233,6 @@
 
   .main-panel {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
   }
 
   .panel-resize-handle {

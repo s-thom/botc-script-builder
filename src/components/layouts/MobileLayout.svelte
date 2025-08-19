@@ -5,6 +5,7 @@
   import CharacterSelectForm from "../character-selection/CharacterSelectForm.svelte";
   import AboutChecks from "../checks/AboutChecks.svelte";
   import ChecksList from "../checks/ChecksList.svelte";
+  import AboutSection from "../common/AboutSection.svelte";
   import MobileNavigation from "../common/MobileNavigation.svelte";
   import PromptDisplay from "../common/PromptDisplay.svelte";
   import TopSticky from "../common/TopSticky.svelte";
@@ -28,6 +29,7 @@
         <CharacterSelectForm />
       {:else if globalState.ui.screen === "options"}
         <ScriptOptions />
+        <AboutSection />
       {:else if globalState.ui.screen === "checks"}
         <div class="reverse-padding">
           <ChecksList />
