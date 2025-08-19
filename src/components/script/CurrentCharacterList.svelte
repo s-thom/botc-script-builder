@@ -68,9 +68,15 @@
       type="button"
       class="button mobile-only"
       onclick={() => (globalState.ui.screen = "select-characters")}
+      data-umami-event="script-empty-select-characters"
       >Select characters</button
     >
-    <button type="button" class="button" onclick={setPrompt}>Prompt me</button>
+    <button
+      type="button"
+      class="button"
+      onclick={setPrompt}
+      data-umami-event="prompt-new">Prompt me</button
+    >
   </div>
 {/each}
 

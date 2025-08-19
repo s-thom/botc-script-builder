@@ -150,6 +150,7 @@
       aria-valuemax={PANEL_MAXIMUM_SIZE}
       onkeydown={scriptKeyHandler}
       onpointerdown={scriptMouseHandler}
+      data-umami-event="script-panel-resize"
       ><span class="visually-hidden">Change script panel size</span></button
     >
   </div>
@@ -173,6 +174,7 @@
       aria-valuemax={PANEL_MAXIMUM_SIZE}
       onkeydown={optionsKeyHandler}
       onpointerdown={optionsMouseHandler}
+      data-umami-event="options-panel-resize"
       ><span class="visually-hidden">Change options panel size</span></button
     >
     <div class="resize-panel-content panel-padding scroll-container">

@@ -113,6 +113,7 @@
               type="button"
               class="icon-button delete-button"
               onclick={() => deleteBootleggerRule(index)}
+              data-umami-event="bootlegger-delete"
               ><Trash aria-label="Delete rule" /></button
             >
           </li>
@@ -120,14 +121,22 @@
       </ul>
     {/if}
 
-    <button class="button" type="button" onclick={addBootleggerRule}
-      >Add rule</button
+    <button
+      class="button"
+      type="button"
+      onclick={addBootleggerRule}
+      data-umami-event="bootlegger-add">Add rule</button
     >
   </div>
   <div class="section">
     <h3>App options</h3>
 
-    <label class="option" for="app-sortOrder">
+    <label
+      class="option"
+      for="app-sortOrder"
+      data-umami-event="option-sort-order-toggle"
+      data-umami-event-enabled={!globalState.options.useSortOrder}
+    >
       <span
         ><input
           id="app-sortOrder"
@@ -154,7 +163,12 @@
       </p>
     </label>
 
-    <label class="option" for="app-checks">
+    <label
+      class="option"
+      for="app-checks"
+      data-umami-event="option-checks-toggle"
+      data-umami-event-enabled={!globalState.ui.useChecks}
+    >
       <span
         ><input
           id="app-checks"

@@ -26,14 +26,15 @@
       onclick={() => {
         globalState.ui.screen = "checks:about";
         globalState.ui.prevScreen = "checks";
-      }}>About checks</button
+      }}
+      data-umami-event="checks-about">About checks</button
     >
     {#if globalState.ui.ignoredChecks.length > 0}
       <button
         type="button"
         class="link-button"
         onclick={() => (globalState.ui.ignoredChecks = [])}
-        >Re-enable all checks</button
+        data-umami-event="checks-reenable">Re-enable all checks</button
       >
     {/if}
   </p>

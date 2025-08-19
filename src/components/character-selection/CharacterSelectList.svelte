@@ -33,6 +33,9 @@
           selectedSet.has(character.id) && "selected",
           itemClass,
         ]}
+        data-umami-event="select-character"
+        data-umami-event-character={character.id}
+        data-umami-event-selected={!selectedSet.has(character.id)}
       >
         <CharacterIcon {character} class="select-icon" />
         <p class="character-name">{character.name}</p>

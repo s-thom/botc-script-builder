@@ -13,7 +13,8 @@
       type="button"
       class="icon-button"
       aria-label="Dismiss prompt"
-      onclick={() => (globalState.ui.prompt = undefined)}><Close /></button
+      onclick={() => (globalState.ui.prompt = undefined)}
+      data-umami-event="prompt-dismiss"><Close /></button
     >
   </div>
 {/if}

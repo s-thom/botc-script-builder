@@ -152,9 +152,16 @@
     aria-valuemax={PANEL_MAXIMUM_SIZE}
     onkeydown={keyPressHandler}
     onpointerdown={mouseDownHandler}
+    data-umami-event="checks-panel-resize"
     ><span class="visually-hidden">Change checks panel size</span></button
   >
-  <button type="button" class="tab" onclick={onTabClick}>
+  <button
+    type="button"
+    class="tab"
+    onclick={onTabClick}
+    data-umami-event="checks-tab-toggle"
+    data-umami-event-open={!globalState.ui.isChecksDrawerOpen}
+  >
     {#if checksData.hasFixes}
       <SearchSparkle class="inline-icon" />
     {:else if checksData.hasResults}

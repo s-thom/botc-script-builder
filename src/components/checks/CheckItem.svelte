@@ -62,7 +62,12 @@
           <Wand class="inline-icon summary-icon" aria-label="Has actions" />
         {/if}
       </span>
-      <button type="button" class="icon-button" onclick={ignoreCheck}
+      <button
+        type="button"
+        class="icon-button"
+        onclick={ignoreCheck}
+        data-umami-event="check-ignore"
+        data-umami-event-check={result.id}
         ><Close class="inline-icon summary-icon" aria-label="Ignore" /></button
       >
     </summary>
@@ -85,6 +90,9 @@
                 <button
                   type="button"
                   class="icon-button action-button"
+                  data-umami-event="check-action"
+                  data-umami-event-type={action.type}
+                  data-umami-event-character={action.id}
                   onclick={() => addCharacter(character)}
                 >
                   <CharacterIcon {character} class="action-icon" />

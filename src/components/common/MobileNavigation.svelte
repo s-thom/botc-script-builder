@@ -71,6 +71,8 @@
               globalState.ui.screen.startsWith(page) && "current",
             ]}
             onclick={setScreenHandler(page)}
+            data-umami-event="nav-button"
+            data-umami-event-screen={page}
           >
             <span
               >{#if page === "checks"}

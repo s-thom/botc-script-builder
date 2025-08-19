@@ -96,7 +96,9 @@
   <button
     type="button"
     class="button"
-    onclick={() => (isShowingImport = !isShowingImport)}>Import script</button
+    onclick={() => (isShowingImport = !isShowingImport)}
+    data-umami-event="script-import-open"
+    data-umami-event-open={!isShowingImport}>Import script</button
   >
   <button
     type="button"
@@ -121,8 +123,10 @@
     transition:slide={{ axis: "y", duration: 150 }}
   >
     <fieldset class="fieldset">
-      <label for="file-upload" class="button file-upload-label"
-        >Upload .json file</label
+      <label
+        for="file-upload"
+        class="button file-upload-label"
+        data-umami-event="script-import-file-upload">Upload .json file</label
       >
       <input
         type="file"
@@ -151,7 +155,7 @@
         type="submit"
         class="button"
         disabled={isImporting}
-        data-umami-event="script-import"
+        data-umami-event="script-import-textarea-submit"
       >
         Import
       </button>

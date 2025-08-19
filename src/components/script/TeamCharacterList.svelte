@@ -95,7 +95,8 @@
         type="button"
         class="icon-button delete-button"
         onclick={() => handleDelete(character)}
-        ><Trash aria-label={`Delete ${character.name}`} /></button
+        data-umami-event="script-character-remove"
+        ><Trash aria-label={`Remove ${character.name}`} /></button
       >
     </li>
   {/each}

@@ -15,6 +15,7 @@
   <button
     type="button"
     class="back-link link-button"
+    data-umami-event="checks-about-back"
     onclick={() => {
       globalState.ui.screen = globalState.ui.prevScreen ?? "checks";
       globalState.ui.prevScreen = undefined;
