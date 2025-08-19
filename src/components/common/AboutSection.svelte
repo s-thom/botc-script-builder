@@ -18,7 +18,7 @@
       ><span class="lizard">𓆈</span> Stuart Thomson</a
     >.
     <a
-      href="https://github.com/s-thom/botc-script-viewer"
+      href="https://github.com/s-thom/botc-script-builder"
       target="_blank"
       rel="external noreferrer"
       data-umami-event="github-link"
