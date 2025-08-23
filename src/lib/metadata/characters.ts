@@ -670,7 +670,7 @@ export const CHARACTER_METADATA: Record<
   lordoftyphon: {
     edition: "carousel",
     actionType: "each-night-star",
-    // Not adding extra evil players, as it's more of a modification to what the base number of evils is.
+    needsExtraMinion: true,
   },
   boffin: {
     edition: "carousel",

@@ -1,7 +1,15 @@
 import type { GlobalState } from "../state/types";
 import { scheduleTask } from "../util/async";
-import { ALL_CHECKS } from "./checks";
-import type { CheckResult } from "./types";
+import { ALWAYS_CHECKS } from "./always";
+import { CHARACTER_CHECKS } from "./characters";
+import { SCRIPT_CHECKS } from "./script";
+import type { Check, CheckResult } from "./types";
+
+const ALL_CHECKS: Check[] = [
+  ...ALWAYS_CHECKS,
+  ...SCRIPT_CHECKS,
+  ...CHARACTER_CHECKS,
+];
 
 export async function runAllChecks(
   state: GlobalState,
