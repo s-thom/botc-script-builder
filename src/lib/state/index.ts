@@ -2,12 +2,13 @@ import {
   CURRENT_STATE_VERSION,
   type AllPastStateTypes,
   type GlobalState,
+  type GlobalStateV2,
 } from "./types";
 
 const KEY = "botc-script-builder-state";
 
 const DEFAULT_INITIAL_STATE: GlobalState = {
-  version: 1,
+  version: 2,
   meta: { id: "_meta", name: "" },
   characters: {
     townsfolk: [],
@@ -22,6 +23,7 @@ const DEFAULT_INITIAL_STATE: GlobalState = {
     useSortOrder: true,
   },
   ui: {
+    theme: "system",
     useChecks: true,
     isChecksDrawerOpen: false,
     ignoredChecks: [],
@@ -38,6 +40,13 @@ export function getInitialState(): GlobalState {
       if (state.version === CURRENT_STATE_VERSION) {
         return state;
       } else {
+        const coerced = state as unknown as GlobalState;
+
+        switch (state.version) {
+          case 1:
+            coerced.ui.theme = "system";
+            return coerced;
+        }
         console.warn("Unknown state version, resetting to initial");
       }
     } catch (err) {}

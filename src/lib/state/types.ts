@@ -8,6 +8,8 @@ export interface BuilderOptions {
   useSortOrder: boolean;
 }
 
+export type AppTheme = "system" | "light" | "dark";
+
 export type AppScreen =
   | "script"
   | "options"
@@ -36,8 +38,30 @@ export interface GlobalStateV1 {
   };
 }
 
-export type AllPastStateTypes = GlobalStateV1;
+export interface GlobalStateV2 {
+  version: 2;
+  meta: ScriptMetadata;
+  characters: Record<CharacterTeam, ScriptCharacter[]>;
+  unknownCharacters: ScriptCharacter[];
+  options: BuilderOptions;
+  ui: {
+    theme: AppTheme;
+    useChecks: boolean;
+    isChecksDrawerOpen: boolean;
+    ignoredChecks: string[];
+    panelSizes: {
+      script: number;
+      options: number;
+      checks: number;
+    };
+    screen: AppScreen;
+    prevScreen?: AppScreen;
+    prompt?: string;
+  };
+}
 
-export type GlobalState = GlobalStateV1;
+export type AllPastStateTypes = GlobalStateV1 | GlobalStateV2;
 
-export const CURRENT_STATE_VERSION: GlobalState["version"] = 1;
+export type GlobalState = GlobalStateV2;
+
+export const CURRENT_STATE_VERSION: GlobalState["version"] = 2;

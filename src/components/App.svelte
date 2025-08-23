@@ -15,6 +15,7 @@
   const large = new MediaQuery("min-width: 960px");
   const medium = new MediaQuery("min-width: 600px");
 
+  // Run checks
   $effect(() => {
     const signal = getAbortSignal();
     const state = $state.snapshot(globalState);
@@ -53,6 +54,7 @@
       });
   });
 
+  // Persist state
   $effect(() => {
     const signal = getAbortSignal();
     const state = $state.snapshot(globalState);
@@ -70,6 +72,16 @@
         }
         console.error("Error while persisting state", err);
       });
+  });
+
+  // Theme changes
+  $effect(() => {
+    const theme = globalState.ui.theme;
+    if (theme && theme !== "system") {
+      document.documentElement.dataset.theme = theme;
+    } else {
+      delete document.documentElement.dataset.theme;
+    }
   });
 </script>
 

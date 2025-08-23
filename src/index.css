@@ -312,6 +312,33 @@ a {
   }
 }
 
+.button-group {
+  & > .button {
+    background-color: var(--color-control-background-active);
+
+    &:where(&:has(input:checked), &:hover) {
+      background-color: var(--color-control-background);
+    }
+
+    &:not(:first-child) {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+
+      &:is(:hover + &) {
+        border-inline-start-width: 0;
+      }
+    }
+    &:not(:last-child) {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+
+      &:not(:hover) {
+        border-inline-end-width: 0;
+      }
+    }
+  }
+}
+
 .link-button {
   background-color: transparent;
   border: none;
