@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { sortCharacters } from "../../lib/characters";
-  import { globalState } from "../../lib/state.svelte";
-  import ExternalImage from "../common/ExternalImage.svelte";
   import { Trash } from "svelte-codicons";
+  import { doSortScript, globalState } from "../../lib/state.svelte";
+  import ExternalImage from "../common/ExternalImage.svelte";
 
   function addBootleggerRule() {
     globalState.meta.bootlegger ??= [];
@@ -178,14 +177,12 @@
           name="app-sortOrder"
           type="checkbox"
           autocomplete="off"
-          value="hideTitle"
+          value="sortOrder"
           bind:checked={
             () => globalState.options.useSortOrder,
             (value) => {
               globalState.options.useSortOrder = value;
-              if (value) {
-                globalState.characters = sortCharacters(globalState.characters);
-              }
+              doSortScript();
             }
           }
         /> Use sort order</span
@@ -195,6 +192,34 @@
           href="https://bloodontheclocktower.com/news/sort-order-sao-update"
           rel="external noreferrer">sort order</a
         >.
+      </p>
+    </label>
+
+    <label
+      class="option indented"
+      for="app-sortOrderFun"
+      data-umami-event="option-sort-order-fun-toggle"
+      data-umami-event-enabled={!globalState.options.useSortOrder}
+    >
+      <span
+        ><input
+          id="app-sortOrderFun"
+          name="app-sortOrderFun"
+          type="checkbox"
+          autocomplete="off"
+          value="sortOrderFun"
+          bind:checked={
+            () => globalState.options.useSortOrderFun,
+            (value) => {
+              globalState.options.useSortOrderFun = value;
+              doSortScript();
+            }
+          }
+          disabled={!globalState.options.useSortOrder}
+        /> Extra sorting rules</span
+      >
+      <p class="hint">
+        e.g. make a face using the Xaan and Goblin if both are on the script.
       </p>
     </label>
 
@@ -232,6 +257,10 @@
   .image-option-container,
   .option:not(.image-option-container .option) {
     margin: 0.2rem;
+
+    &.indented {
+      margin-inline-start: 1rem;
+    }
   }
 
   .image-option-container {

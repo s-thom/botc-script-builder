@@ -9,11 +9,11 @@
     Warning,
     type SvgComponent,
   } from "svelte-codicons";
-  import type { CheckResult } from "../../lib/checks/types";
-  import { CHARACTERS_BY_ID, sortCharacters } from "../../lib/characters";
-  import CharacterIcon from "../common/CharacterIcon.svelte";
   import type { ScriptCharacter } from "../../generated/script-schema";
-  import { globalState } from "../../lib/state.svelte";
+  import { CHARACTERS_BY_ID } from "../../lib/characters";
+  import type { CheckResult } from "../../lib/checks/types";
+  import { doSortScript, globalState } from "../../lib/state.svelte";
+  import CharacterIcon from "../common/CharacterIcon.svelte";
 
   const LEVEL_ICONS: Record<CheckResult["level"], typeof SvgComponent> = {
     error: Error,
@@ -32,9 +32,7 @@
   function addCharacter(character: ScriptCharacter) {
     globalState.characters[character.team].push(character);
 
-    if (globalState.options.useSortOrder) {
-      globalState.characters = sortCharacters(globalState.characters);
-    }
+    doSortScript();
   }
 
   function ignoreCheck() {

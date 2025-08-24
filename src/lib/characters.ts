@@ -185,69 +185,118 @@ const SORT_ORDER_REGEXES = SORT_ORDER_PREFIXES.map(
     new RegExp(`^${prefix.replace(/\*/g, "\\*").replace(/!/g, "[^*]")}`)
 );
 
-const SORT_OVERRIDES: [OfficialCharacterId, OfficialCharacterId][] = [
-  ["washerwoman", "librarian"],
-  ["washerwoman", "investigator"],
-  ["librarian", "investigator"],
-];
-const SORT_OVERRIDE_LOOKUPS: Partial<
-  Record<string, Partial<Record<string, number>>>
-> = {};
-for (const [a, b] of SORT_OVERRIDES) {
-  SORT_OVERRIDE_LOOKUPS[a] ??= {};
-  SORT_OVERRIDE_LOOKUPS[a][b] = -1;
-  SORT_OVERRIDE_LOOKUPS[b] ??= {};
-  SORT_OVERRIDE_LOOKUPS[b][a] = 1;
+type Comparator = (a: ScriptCharacter, b: ScriptCharacter) => number;
+
+function reverse(comparator: Comparator): Comparator {
+  return (a, b) => comparator(b, a);
 }
 
-function compareCharacters(a: ScriptCharacter, b: ScriptCharacter): number {
-  const override = SORT_OVERRIDE_LOOKUPS[a.id]?.[b.id];
-  if (override !== undefined) {
-    return override;
-  }
-
-  // See which character appears first in the sort order
-  for (const regex of SORT_ORDER_REGEXES) {
-    const aTest = regex.test(a.ability);
-    const bTest = regex.test(b.ability);
-    if (aTest && bTest) {
-      break;
-    }
+function booleanComparator(
+  test: (value: ScriptCharacter) => boolean
+): Comparator {
+  return (a: ScriptCharacter, b: ScriptCharacter) => {
+    const aTest = test(a);
+    const bTest = test(b);
     if (aTest && !bTest) {
       return -1;
     }
     if (!aTest && bTest) {
       return 1;
     }
+    return 0;
+  };
+}
+function numberComparator(
+  getter: (value: ScriptCharacter) => number
+): Comparator {
+  return (a: ScriptCharacter, b: ScriptCharacter) => {
+    const aValue = getter(a);
+    const bValue = getter(b);
+    return aValue - bValue;
+  };
+}
+function stringComparator(
+  getter: (value: ScriptCharacter) => string
+): Comparator {
+  return (a: ScriptCharacter, b: ScriptCharacter) => {
+    const aString = getter(a);
+    const bString = getter(b);
+    return aString.localeCompare(bString);
+  };
+}
+
+function top3(): Comparator {
+  // As these characters are always together and always at the top of the list, we don't need
+  // to check whether we need to move them around, like with the Xaan face.
+
+  // This list is backwards because we're using `.indexOf()` for sorting, and entries that
+  // don't exist have a value of -1. By sorting backwards, this puts them at the end instead.
+  const reverseRoles = ["investigator", "librarian", "washerwoman"];
+
+  return reverse(
+    numberComparator((character) => reverseRoles.indexOf(character.id))
+  );
+}
+
+function xaanFace(minions: ScriptCharacter[]): Comparator {
+  const hats = ["baron", "witch"];
+  const eyes = ["xaan"];
+  const noses = ["boomdandy", "summoner"];
+  const mouths = ["goblin"];
+
+  const hat = hats.find((id) => minions.find((minion) => minion.id === id));
+  const eye = eyes.find((id) => minions.find((minion) => minion.id === id));
+  const nose = noses.find((id) => minions.find((minion) => minion.id === id));
+  const mouth = mouths.find((id) => minions.find((minion) => minion.id === id));
+
+  // Only do sorting if it's possible to make a face at all.
+  if (!(eye && mouth)) {
+    return () => 0;
   }
 
-  // Both characters are the same in the sort order prefixes. Test length of ability, then name
-  const abilityLengthDiff = a.ability.length - b.ability.length;
-  if (abilityLengthDiff !== 0) {
-    return abilityLengthDiff;
-  }
-  const nameLengthDiff = a.name.length - b.name.length;
-  if (nameLengthDiff !== 0) {
-    return nameLengthDiff;
-  }
+  const orderedRoles = [hat, eye, nose, mouth].filter(
+    (s) => typeof s === "string"
+  );
 
-  // Characters have the same length ability and name, sort by character name alphabetically.
-  // If two characters have the same ability and name, then that's the script writer's problem.
-  // Javascript's sort is unstable, so the order may swap around.
-  // I have seen this in practice, where Fall of Rome's High Priest has two identical travellers with different crowns as their icons.
-  return a.name.localeCompare(b.name);
+  // No need to reverse here, since the Xaan face will always be at the end of the section.
+  return numberComparator((character) => orderedRoles.indexOf(character.id));
+}
+
+function combineComparators(...comparators: Comparator[]): Comparator {
+  return (a: ScriptCharacter, b: ScriptCharacter) => {
+    for (const comparator of comparators) {
+      const result = comparator(a, b);
+      if (result !== 0) {
+        return result;
+      }
+    }
+
+    return 0;
+  };
 }
 
 export function sortCharacters(
-  teams: Record<CharacterTeam, ScriptCharacter[]>
+  teams: Record<CharacterTeam, ScriptCharacter[]>,
+  isFun: boolean
 ): Record<CharacterTeam, ScriptCharacter[]> {
   // TODO: ensure characters are in the correct teams.
   // This should be the case anyway.
 
+  const comparator = combineComparators(
+    top3(),
+    isFun ? xaanFace(teams.minion) : () => 0,
+    ...SORT_ORDER_REGEXES.map((regex) =>
+      booleanComparator((character) => regex.test(character.ability))
+    ),
+    numberComparator((character) => character.ability.length),
+    numberComparator((character) => character.name.length),
+    stringComparator((character) => character.name)
+  );
+
   return Object.fromEntries(
     Object.entries(teams).map(([team, characters]) => [
       team,
-      [...characters].sort(compareCharacters),
+      [...characters].sort(comparator),
     ])
   ) as Record<CharacterTeam, ScriptCharacter[]>;
 }

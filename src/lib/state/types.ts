@@ -4,10 +4,6 @@ import type {
   ScriptCharacter,
 } from "../../generated/script-schema";
 
-export interface BuilderOptions {
-  useSortOrder: boolean;
-}
-
 export type AppTheme = "system" | "light" | "dark";
 
 export type AppScreen =
@@ -22,7 +18,9 @@ export interface GlobalStateV1 {
   meta: ScriptMetadata;
   characters: Record<CharacterTeam, ScriptCharacter[]>;
   unknownCharacters: ScriptCharacter[];
-  options: BuilderOptions;
+  options: {
+    useSortOrder: boolean;
+  };
   ui: {
     useChecks: boolean;
     isChecksDrawerOpen: boolean;
@@ -43,7 +41,10 @@ export interface GlobalStateV2 {
   meta: ScriptMetadata;
   characters: Record<CharacterTeam, ScriptCharacter[]>;
   unknownCharacters: ScriptCharacter[];
-  options: BuilderOptions;
+  options: {
+    useSortOrder: boolean;
+    useSortOrderFun: boolean;
+  };
   ui: {
     theme: AppTheme;
     useChecks: boolean;

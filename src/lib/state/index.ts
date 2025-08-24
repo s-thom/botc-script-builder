@@ -21,6 +21,7 @@ const DEFAULT_INITIAL_STATE: GlobalState = {
   unknownCharacters: [],
   options: {
     useSortOrder: true,
+    useSortOrderFun: true,
   },
   ui: {
     theme: "system",
@@ -44,7 +45,9 @@ export function getInitialState(): GlobalState {
 
         switch (state.version) {
           case 1:
+            coerced.version = 2;
             coerced.ui.theme = "system";
+            coerced.options.useSortOrderFun = true;
             return coerced;
         }
         console.warn("Unknown state version, resetting to initial");

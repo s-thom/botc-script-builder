@@ -7,12 +7,11 @@
   import {
     CHARACTERS_BY_TEAM,
     getEnforcedFabled,
-    sortCharacters,
     TEAM_NAMES,
   } from "../../lib/characters";
   import { CHARACTER_METADATA } from "../../lib/metadata/characters";
   import { EDITIONS } from "../../lib/metadata/editions";
-  import { globalState } from "../../lib/state.svelte";
+  import { doSortScript, globalState } from "../../lib/state.svelte";
   import { filterInPlace } from "../../lib/util/arrays";
   import CharacterSelectList from "./CharacterSelectList.svelte";
 
@@ -66,11 +65,9 @@
       }
     } else {
       globalState.characters[character.team].push(character);
-
-      if (globalState.options.useSortOrder) {
-        globalState.characters = sortCharacters(globalState.characters);
-      }
     }
+
+    doSortScript();
   }
 
   function onTeamSelect(character: ScriptCharacter) {

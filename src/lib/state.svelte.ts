@@ -53,9 +53,7 @@ export function setScript(script: BloodOnTheClocktowerCustomScript) {
   globalState.characters = characters;
   globalState.unknownCharacters = unknownCharacters;
 
-  if (globalState.options.useSortOrder) {
-    globalState.characters = sortCharacters(globalState.characters);
-  }
+  doSortScript();
 }
 
 export function getScript(): BloodOnTheClocktowerCustomScript {
@@ -85,3 +83,12 @@ export const checksState = $state<ChecksState>({
   warnings: [],
   infos: [],
 });
+
+export function doSortScript() {
+  if (globalState.options.useSortOrder) {
+    globalState.characters = sortCharacters(
+      globalState.characters,
+      globalState.options.useSortOrderFun
+    );
+  }
+}
