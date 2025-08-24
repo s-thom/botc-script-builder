@@ -262,6 +262,26 @@ function xaanFace(minions: ScriptCharacter[]): Comparator {
   return numberComparator((character) => orderedRoles.indexOf(character.id));
 }
 
+function kazaliFace(demons: ScriptCharacter[]): Comparator {
+  const hats = ["alhadikhia"];
+  const eyes = ["kazali"];
+  const mouths = ["yaggababble"];
+
+  const hat = hats.find((id) => demons.find((demon) => demon.id === id));
+  const eye = eyes.find((id) => demons.find((demon) => demon.id === id));
+  const mouth = mouths.find((id) => demons.find((demon) => demon.id === id));
+
+  // Only do sorting if it's possible to make a face at all.
+  if (!(eye && mouth)) {
+    return () => 0;
+  }
+
+  const orderedRoles = [hat, eye, mouth].filter((s) => typeof s === "string");
+
+  // No need to reverse here, since the Kazali face will always be at the end of the section.
+  return numberComparator((character) => orderedRoles.indexOf(character.id));
+}
+
 function combineComparators(...comparators: Comparator[]): Comparator {
   return (a: ScriptCharacter, b: ScriptCharacter) => {
     for (const comparator of comparators) {
@@ -283,8 +303,11 @@ export function sortCharacters(
   // This should be the case anyway.
 
   const comparator = combineComparators(
+    // Special rules
     top3(),
     isFun ? xaanFace(teams.minion) : () => 0,
+    isFun ? kazaliFace(teams.demon) : () => 0,
+    // Normal script order
     ...SORT_ORDER_REGEXES.map((regex) =>
       booleanComparator((character) => regex.test(character.ability))
     ),
