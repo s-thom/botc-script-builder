@@ -574,6 +574,7 @@ export const CHARACTER_METADATA: Record<
     edition: "kickstarter",
     actionType: "each-night-star",
     causesExtraNightDeaths: true,
+    causesResurrection: true,
   },
   legion: {
     edition: "kickstarter",
