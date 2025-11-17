@@ -1,29 +1,11 @@
-# [BotC Script Builder](https://botc-script-builder.sthom.kiwi)
+# This project has been merged with my [BotC Script Viewer](https://botc-script-viewer.sthom.kiwi)
 
-A web app for building [Blood on the Clocktower](https://bloodontheclocktower.com/) scripts.
+The merge means it's even easier to go from vieewing a script to editing it.
 
-This is an alternative to the [official script building tool](https://script.bloodontheclocktower.com/), and adds a couple of new features:
-
-- Script sorting (using the official sort order)
-- Automatic checks against common script building advice
+The viewer's source code is at <https://github.com/s-thom/botc-script-builder>.
 
 ## Acknowledgements
 
-This site is not in any way affiliated with The Pandemonium Institute. All roles and characters are the property of Steven Medway and The Pandemonium Institute.
+This project is not in any way affiliated with The Pandemonium Institute. All roles and characters are the property of Steven Medway and The Pandemonium Institute.
 
 Blood on the Clocktower is a trademark of Steven Medway and The Pandemonium Institute.
-
-## Development instructions
-
-<details>
-<summary>Development instructions</summary>
-
-Requires a modern version of Node.
-
-```sh
-npm ci
-npm run setup
-npm run dev
-```
-
-</details>
